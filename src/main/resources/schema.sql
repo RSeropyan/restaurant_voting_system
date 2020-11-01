@@ -2,8 +2,9 @@ DROP TABLE IF EXISTS `jr`.`restaurant`;
 
 CREATE TABLE `jr`.`restaurant`
 (
-    `id`   INT          NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
+    `id`    INT          NOT NULL AUTO_INCREMENT,
+    `name`  VARCHAR(255) NOT NULL,
+    `votes` INT          NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `restaurant_name_idx` (`name` ASC)
 );
