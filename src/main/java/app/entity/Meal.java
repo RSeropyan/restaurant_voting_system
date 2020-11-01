@@ -10,7 +10,10 @@ public class Meal {
     private Integer id;
 
     private String name;
+
+    @Enumerated(EnumType.STRING)
     private MealCategory category;
+
     private Integer price;
 
     @ManyToOne(fetch = FetchType.LAZY)
