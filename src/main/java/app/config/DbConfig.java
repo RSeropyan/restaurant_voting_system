@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -68,6 +69,7 @@ public class DbConfig {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        properties.setProperty("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
         properties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
         return properties;
     }
@@ -78,6 +80,5 @@ public class DbConfig {
         transactionManager.setEntityManagerFactory(entityManagerFactory);
         return transactionManager;
     }
-
 
 }

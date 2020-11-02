@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `jr`.`meal`;
 DROP TABLE IF EXISTS `jr`.`restaurant`;
 
 CREATE TABLE `jr`.`restaurant`
@@ -9,13 +10,11 @@ CREATE TABLE `jr`.`restaurant`
     UNIQUE INDEX `restaurant_name_idx` (`name` ASC)
 );
 
-DROP TABLE IF EXISTS `jr`.`meal`;
-
 CREATE TABLE `jr`.`meal`
 (
     `id`         INT                                               NOT NULL AUTO_INCREMENT,
     `name`       VARCHAR(255)                                      NOT NULL,
-    `category`   ENUM ('salad', 'soup', 'main', 'desert', 'drink') NOT NULL,
+    `category`   ENUM ('SALAD', 'SOUP', 'MAIN', 'DESERT', 'DRINK') NOT NULL,
     `price`      INT                                               NOT NULL,
     `restaurant` INT                                               NOT NULL,
     PRIMARY KEY (`id`),

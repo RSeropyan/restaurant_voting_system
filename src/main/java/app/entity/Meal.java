@@ -63,4 +63,13 @@ public class Meal {
         this.restaurant = restaurant;
     }
 
+    @Override
+    public String toString() {
+        return "Meal{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", category=" + category +
+                ", price=" + price +
+                '}';
+    }
 }
