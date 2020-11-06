@@ -20,6 +20,12 @@ public class Restaurant {
     public Restaurant() {
     }
 
+    public Restaurant(Integer id, String name, Integer votes) {
+        this.id = id;
+        this.name = name;
+        this.votes = votes;
+    }
+
     public Integer getId() {
         return id;
     }
