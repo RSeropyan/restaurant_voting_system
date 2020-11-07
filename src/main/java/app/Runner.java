@@ -8,7 +8,8 @@ public class Runner {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext("app.config");
         RestaurantService restaurantService = (RestaurantService) ctx.getBean("restaurantService");
-        restaurantService.getById(1);
+        restaurantService.getAll();
+        restaurantService.getAll();
     }
 
 }

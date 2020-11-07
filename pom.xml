@@ -11,12 +11,13 @@
 
     <dependencies>
         <!-- Core -->
-        <!-- spring-context -->
+        <!-- spring-context-support -->
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
+            <artifactId>spring-context-support</artifactId>
             <version>5.2.10.RELEASE</version>
         </dependency>
+
 
         <!-- Testing -->
         <!-- spring-test -->
@@ -61,6 +62,13 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.48</version>
         </dependency>
+        <!-- ehcache -->
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>3.9.0</version>
+        </dependency>
+
 
     </dependencies>
 
