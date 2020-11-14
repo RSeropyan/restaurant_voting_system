@@ -4,6 +4,7 @@ import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,11 +35,58 @@ public class RestaurantServiceTest extends ServiceTest {
     }
 
     @Test
+    public void getTotalNumber() {
+        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, Sort.unsorted());
+        assertThat(realRestaurants).hasSameSizeAs(testRestaurants);
+    }
+
+    @Test
     public void getAll() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
-        List<Restaurant> realRestaurants = restaurantService.getAll();
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, Sort.unsorted());
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
-                                   .usingRecursiveComparison().isEqualTo(testRestaurants);
+                .usingRecursiveComparison().isEqualTo(testRestaurants);
+    }
+
+    @Test
+    public void getAllSortedById() {
+        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, Sort.by("id"));
+        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison().isEqualTo(testRestaurants);
+    }
+
+    @Test
+    public void getAllSortedByVotesAscending() {
+        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, Sort.by("votes").ascending());
+        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison().isEqualTo(testRestaurants);
+    }
+
+    @Test
+    public void getAllSortedByVotesDescending() {
+        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, Sort.by("votes").descending());
+        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison().isEqualTo(testRestaurants);
+    }
+
+    @Test
+    public void getAllSortedByNameAscending() {
+        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, Sort.by("name").ascending());
+        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison().isEqualTo(testRestaurants);
+    }
+
+    @Test
+    public void getAllSortedByNameDescending() {
+        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, Sort.by("name").descending());
+        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison().isEqualTo(testRestaurants);
     }
 
 }
