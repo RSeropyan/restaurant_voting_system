@@ -18,7 +18,6 @@
             <version>5.2.10.RELEASE</version>
         </dependency>
 
-
         <!-- Testing -->
         <!-- spring-test -->
         <dependency>
@@ -42,7 +41,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <!-- Data access and DBs -->
         <!-- spring-data-jpa -->
         <dependency>
@@ -56,21 +54,36 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.4.22.Final</version>
         </dependency>
-        <!-- mysql-connector-java -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.48</version>
-        </dependency>
-        <!-- ehcache -->
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>3.9.0</version>
-        </dependency>
-
 
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <dependencies>
+                <!-- h2 -->
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                    <version>1.4.200</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <dependencies>
+                <!-- mysql-connector-java -->
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>5.1.48</version>
+                </dependency>
+            </dependencies>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
 
     <build>
         <pluginManagement>
