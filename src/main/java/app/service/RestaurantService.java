@@ -3,20 +3,21 @@ package app.service;
 import app.dao.RestaurantRepository;
 import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
-import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Service
 @Transactional
 @CacheConfig(cacheNames = {"restaurants"})
 public class RestaurantService {
+
+    private final Logger logger = LoggerFactory.getLogger(app.service.RestaurantService.class);
 
     private final RestaurantRepository restaurantRepository;
 
@@ -26,6 +27,7 @@ public class RestaurantService {
 
     @Cacheable
     public Restaurant getById(Integer id) {
+        logger.info("Logging...");
         return restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found.")) ;
     }
