@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,7 @@ public class RestaurantService {
 
     @Cacheable
     public Restaurant getById(Integer id) {
-        logger.info("Returning restaurant with id = {}", id);
+        logger.info("Service layer: Returning restaurant with id = {}", id);
 
         return restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found.")) ;
@@ -38,13 +39,13 @@ public class RestaurantService {
 
     @Cacheable
     public Integer getTotalNumber() {
-        logger.info("Returning total number of restaurants");
+        logger.info("Service layer: Returning total number of restaurants");
         return restaurantRepository.findAll().size();
     }
 
     @Cacheable
-    public List<Restaurant> getAll(Integer currentPage, Integer pageSize,Sort sort) {
-        logger.info("Returning all restaurants");
+    public List<Restaurant> getAll(@Nullable Integer currentPage, @Nullable Integer pageSize, @Nullable Sort sort) {
+        logger.info("Service layer: Returning all restaurants");
 
         currentPage = (currentPage == null ? 0 : currentPage);
         pageSize = (pageSize == null ? Integer.MAX_VALUE : pageSize);
