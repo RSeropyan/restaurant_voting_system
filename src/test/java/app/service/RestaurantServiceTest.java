@@ -37,8 +37,8 @@ public class RestaurantServiceTest extends ServiceTest {
     @Test
     public void getTotalNumber() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
-        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, Sort.unsorted());
-        assertThat(realRestaurants).hasSameSizeAs(testRestaurants);
+        Integer realTotalNumber = restaurantService.getTotalNumber();
+        assertThat(realTotalNumber).isEqualTo(testRestaurants.size());
     }
 
     @Test
