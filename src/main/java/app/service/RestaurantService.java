@@ -38,6 +38,7 @@ public class RestaurantService {
 
     @Cacheable
     public Integer getTotalNumber() {
+        logger.info("Returning total number of restaurants");
         return restaurantRepository.findAll().size();
     }
 
