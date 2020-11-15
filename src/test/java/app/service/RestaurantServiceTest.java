@@ -42,7 +42,7 @@ public class RestaurantServiceTest extends ServiceTest {
     }
 
     @Test
-    public void getAll() {
+    public void getAllNotPageableNotSorted() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
         List<Restaurant> realRestaurants = restaurantService.getAll(null, null, Sort.unsorted());
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
@@ -85,6 +85,22 @@ public class RestaurantServiceTest extends ServiceTest {
     public void getAllSortedByNameDescending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
         List<Restaurant> realRestaurants = restaurantService.getAll(null, null, Sort.by("name").descending());
+        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison().isEqualTo(testRestaurants);
+    }
+
+    @Test
+    public void getAllFirstPage() {
+        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1);
+        List<Restaurant> realRestaurants = restaurantService.getAll(0, 1, Sort.unsorted());
+        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison().isEqualTo(testRestaurants);
+    }
+
+    @Test
+    public void getAllSecondPage() {
+        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2);
+        List<Restaurant> realRestaurants = restaurantService.getAll(1, 1, Sort.unsorted());
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
                 .usingRecursiveComparison().isEqualTo(testRestaurants);
     }

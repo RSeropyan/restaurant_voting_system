@@ -46,7 +46,7 @@ public class RestaurantService {
         logger.info("Returning all restaurants");
 
         currentPage = (currentPage == null ? 0 : currentPage);
-        pageSize = (pageSize == null ? 5 : Integer.MAX_VALUE);
+        pageSize = (pageSize == null ? Integer.MAX_VALUE : pageSize);
         sort = (sort == null ? Sort.by("votes").descending() : sort);
         Pageable pageable = PageRequest.of(currentPage, pageSize, sort);
 
