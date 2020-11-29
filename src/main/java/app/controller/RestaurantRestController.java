@@ -17,13 +17,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/restaurants")
-public class RestaurantsRestController {
+public class RestaurantRestController {
 
-    private final Logger logger = LoggerFactory.getLogger(app.controller.RestaurantsRestController.class);
+    private final Logger logger = LoggerFactory.getLogger(app.controller.RestaurantRestController.class);
 
     private final RestaurantService restaurantService;
 
-    public RestaurantsRestController(RestaurantService restaurantService) {
+    public RestaurantRestController(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
     }
 
