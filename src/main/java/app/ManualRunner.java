@@ -4,6 +4,8 @@ import app.entity.Restaurant;
 import app.service.RestaurantService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.ArrayList;
+
 public class ManualRunner {
 
     public static void main(String[] args) {
@@ -14,7 +16,9 @@ public class ManualRunner {
         ctx.refresh();
 
         RestaurantService restaurantService = (RestaurantService) ctx.getBean("restaurantService");
-        restaurantService.create(new Restaurant(null, "Marcellis", 7));
+        Restaurant restaurant = new Restaurant(null, "MacDonalds", 100);
+        restaurant.setMeals(new ArrayList<>());
+        restaurantService.updateById(1, restaurant);
 
     }
 
