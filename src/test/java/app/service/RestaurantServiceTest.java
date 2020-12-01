@@ -26,7 +26,7 @@ public class RestaurantServiceTest extends ServiceTest {
     }
 
     @Test
-    public void getBy_withNonExistingId() {
+    public void getById_withNonExistingId() {
         int id = -1;
         assertThatThrownBy(() -> {
             restaurantService.getById(id);
@@ -35,7 +35,7 @@ public class RestaurantServiceTest extends ServiceTest {
     }
 
     @Test
-    public void getBy_withNullId() {
+    public void getById_withNullId() {
         Integer id = null;
         assertThatThrownBy(() -> {
             restaurantService.getById(id);
@@ -110,6 +110,15 @@ public class RestaurantServiceTest extends ServiceTest {
     public void getAll_expectedSecondPage() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2);
         List<Restaurant> realRestaurants = restaurantService.getAll(1, 1, Sort.unsorted());
+        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison().isEqualTo(testRestaurants);
+    }
+
+    @Test
+    public void deleteById() {
+        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2);
+        restaurantService.deleteById(1);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, Sort.unsorted());
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
                 .usingRecursiveComparison().isEqualTo(testRestaurants);
     }
