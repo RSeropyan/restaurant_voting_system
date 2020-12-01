@@ -17,7 +17,7 @@ public class Restaurant {
 
     private Integer votes;
 
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Meal> meals;
 
     public Restaurant() {

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("dev")
-@ContextConfiguration(classes = {app.config.WebConfig.class, app.config.DbConfig.class, app.config.CacheConfig.class})
+@ContextConfiguration(classes = {app.config.DbConfig.class})
 @Sql(scripts = "/db_population.sql")
 @Transactional
 abstract public class ServiceTest {

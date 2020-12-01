@@ -2,15 +2,16 @@ package app.service;
 
 import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static app.service.testdata.RestaurantTestData.testRestaurant1;
-import static app.service.testdata.RestaurantTestData.testRestaurant2;
+import static app.service.testdata.RestaurantTestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -139,6 +140,37 @@ public class RestaurantServiceTest extends ServiceTest {
             restaurantService.deleteById(id);
         }).isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity id must not be null.");
+    }
+
+    @Test
+    public void create() {
+        Restaurant realRestaurant3 = restaurantService.create(testRestaurant3);
+        assertThat(realRestaurant3).usingRecursiveComparison().isEqualTo(testRestaurant3);
+    }
+
+    @Test
+    public void create_withExistingName() {
+        assertThatThrownBy(() -> {
+            restaurantService.create(new Restaurant(null, testRestaurant1.getName(), 10));
+        }).isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    public void create_withNullEntity() {
+        assertThatThrownBy(() -> {
+            restaurantService.create(null);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("The entity must not be null.");
+    }
+
+    @Test
+    public void create_withNotNullEntityId() {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(100);
+        assertThatThrownBy(() -> {
+            restaurantService.create(restaurant);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("The entity must not contain not null value of id.");
     }
 
 }

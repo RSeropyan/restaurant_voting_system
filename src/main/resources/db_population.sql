@@ -4,10 +4,9 @@ DROP TABLE IF EXISTS `jr`.`restaurant`;
 CREATE TABLE `jr`.`restaurant`
 (
     `id`    INT          NOT NULL AUTO_INCREMENT,
-    `name`  VARCHAR(255) NOT NULL,
+    `name`  VARCHAR(255) NOT NULL UNIQUE,
     `votes` INT          NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE INDEX `restaurant_name_idx` (`name` ASC)
+    PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `jr`.`meal`

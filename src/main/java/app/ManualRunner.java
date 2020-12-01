@@ -1,5 +1,6 @@
 package app;
 
+import app.entity.Restaurant;
 import app.service.RestaurantService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -13,8 +14,8 @@ public class ManualRunner {
         ctx.refresh();
 
         RestaurantService restaurantService = (RestaurantService) ctx.getBean("restaurantService");
-        restaurantService.getById(1);
-        restaurantService.getById(1);
+        restaurantService.create(new Restaurant(null, "Marcellis", 7));
+
     }
 
 }

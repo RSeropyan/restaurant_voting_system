@@ -23,7 +23,6 @@ public class MealService {
         this.mealRepository = mealRepository;
     }
 
-    @Cacheable
     public Meal getById(Integer id) {
         logger.info("Meal Service layer: Returning meal with id = {}", id);
 
