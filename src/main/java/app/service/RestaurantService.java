@@ -6,7 +6,6 @@ import app.exceptions.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,36 +22,57 @@ public class RestaurantService {
 
     private final Logger logger = LoggerFactory.getLogger(app.service.RestaurantService.class);
 
+    private static final Integer DEFAULT_CURRENT_PAGE = 0;
+    private static final Integer DEFAULT_PAGE_SIZE = Integer.MAX_VALUE;
+    private static final String DEFAULT_PROPERTY_TO_SORT_BY = "votes";
+
     private final RestaurantRepository restaurantRepository;
 
     public RestaurantService(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @Cacheable
     public Restaurant getById(Integer id) {
-        logger.info("Service layer: Returning restaurant with id = {}", id);
 
-        return restaurantRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found.")) ;
+        if (id != null) {
+            logger.info("Restaurant Service layer: Returning restaurant with id = {}", id);
+            return restaurantRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
+        }
+        else {
+            throw new IllegalArgumentException("The entity id must not be null.");
+        }
+
     }
 
-    @Cacheable
     public Integer getTotalNumber() {
-        logger.info("Service layer: Returning total number of restaurants");
+        logger.info("Restaurant Service layer: Returning total number of restaurants");
         return restaurantRepository.findAll().size();
     }
 
-    @Cacheable
     public List<Restaurant> getAll(@Nullable Integer currentPage, @Nullable Integer pageSize, @Nullable Sort sort) {
-        logger.info("Service layer: Returning all restaurants");
+        logger.info("Restaurant Service layer: Returning all restaurants");
 
-        currentPage = (currentPage == null ? 0 : currentPage);
-        pageSize = (pageSize == null ? Integer.MAX_VALUE : pageSize);
-        sort = (sort == null ? Sort.by("votes").descending() : sort);
+        currentPage = (currentPage == null ? DEFAULT_CURRENT_PAGE : currentPage);
+        pageSize = (pageSize == null ? DEFAULT_PAGE_SIZE : pageSize);
+        sort = (sort == null ? Sort.by(DEFAULT_PROPERTY_TO_SORT_BY).descending() : sort);
         Pageable pageable = PageRequest.of(currentPage, pageSize, sort);
 
         return restaurantRepository.findAll(pageable).getContent();
+    }
+
+    public void deleteById(Integer id) {
+
+        if (id != null) {
+            Restaurant restaurant = restaurantRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
+            restaurantRepository.delete(restaurant);
+            logger.info("Restaurant Service layer: Restaurant with id = {} has been removed", id);
+        }
+        else {
+            throw new IllegalArgumentException("The entity id must not be null.");
+        }
+
     }
 
 }

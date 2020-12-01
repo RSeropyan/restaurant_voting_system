@@ -13,9 +13,9 @@ import org.springframework.context.annotation.Profile;
 public class CacheConfig {
 
     @Bean
-    @Profile("prod")
+    @Profile("dev")
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("restaurants");
+        return new ConcurrentMapCacheManager("restaurants", "meals");
     }
 
 //    @Bean
