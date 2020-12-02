@@ -17,12 +17,9 @@ CREATE TABLE `jr`.`meal`
     `price`      INT                                               NOT NULL,
     `restaurant` INT                                               NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `restaurant_idx` (`restaurant` ASC),
     CONSTRAINT `restaurant`
         FOREIGN KEY (`restaurant`)
             REFERENCES `jr`.`restaurant` (`id`)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE
 );
 
 INSERT INTO `jr`.`restaurant` (`name`, `votes`)
