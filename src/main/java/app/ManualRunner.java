@@ -16,7 +16,7 @@ public class ManualRunner {
         ctx.refresh();
 
         RestaurantService restaurantService = (RestaurantService) ctx.getBean("restaurantService");
-        Restaurant restaurant = new Restaurant(null, "MacDonalds", 100);
+        Restaurant restaurant = new Restaurant(1, "MacDonalds", 100);
         restaurant.setMeals(new ArrayList<>());
         restaurantService.updateById(1, restaurant);
 

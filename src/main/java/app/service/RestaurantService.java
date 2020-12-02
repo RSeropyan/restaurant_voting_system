@@ -3,6 +3,7 @@ package app.service;
 import app.dao.RestaurantRepository;
 import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
+import app.service.utils.EntityValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheConfig;
@@ -34,14 +35,10 @@ public class RestaurantService {
 
     public Restaurant getById(Integer id) {
 
-        if (id != null) {
-            logger.info("Restaurant Service layer: Returning restaurant with id = {}.", id);
-            return restaurantRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
-        }
-        else {
-            throw new IllegalArgumentException("The entity id must not be null.");
-        }
+        EntityValidator.checkNotNullId(id);
+        logger.info("Restaurant Service layer: Returning restaurant with id = {}.", id);
+        return restaurantRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
 
     }
 
@@ -63,51 +60,39 @@ public class RestaurantService {
 
     public void deleteById(Integer id) {
 
-        if (id != null) {
-            Restaurant restaurant = restaurantRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
-            restaurantRepository.delete(restaurant);
-            logger.info("Restaurant Service layer: Restaurant with id = {} has been removed.", id);
-        }
-        else {
-            throw new IllegalArgumentException("The entity id must not be null.");
-        }
+        EntityValidator.checkNotNullId(id);
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
+        restaurantRepository.delete(restaurant);
+        logger.info("Restaurant Service layer: Restaurant with id = {} has been removed.", id);
 
     }
 
     public Restaurant create(Restaurant restaurant) {
-        if (restaurant != null) {
-            Integer id = restaurant.getId();
-            if (id == null) {
-                logger.info("Restaurant Service layer: Creating new restaurant.");
-                return restaurantRepository.save(restaurant);
-            }
-            else {
-                throw new IllegalArgumentException("The entity must not contain not null value of id.");
-            }
-        }
-        else {
-            throw new IllegalArgumentException("The entity must not be null.");
-        }
+
+        EntityValidator.checkNotNullInstance(restaurant);
+        Integer id = restaurant.getId();
+        EntityValidator.checkNullId(id);
+        EntityValidator.checkNotNullProperties(restaurant);
+
+        logger.info("Restaurant Service layer: Creating new restaurant.");
+        return restaurantRepository.save(restaurant);
+
     }
 
     public void updateById(Integer id, Restaurant restaurant) {
-        if (id != null) {
-            Restaurant r = restaurantRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
-            if (restaurant != null) {
-                r.setName(restaurant.getName());
-                r.setVotes(restaurant.getVotes());
-                r.getMeals().clear();
-                r.getMeals().addAll(restaurant.getMeals());
-            }
-            else {
-                throw new IllegalArgumentException("The entity must not be null.");
-            }
-        }
-        else {
-            throw new IllegalArgumentException("The entity id must not be null.");
-        }
+
+        EntityValidator.checkNotNullId(id);
+        Restaurant r = restaurantRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
+        EntityValidator.checkNotNullInstance(restaurant);
+        EntityValidator.checkNotNullProperties(restaurant);
+
+        r.setName(restaurant.getName());
+        r.setVotes(restaurant.getVotes());
+        r.getMeals().clear();
+        r.getMeals().addAll(restaurant.getMeals());
+
     }
 
 }
