@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -92,6 +93,8 @@ public class RestaurantService {
         r.setVotes(restaurant.getVotes());
         r.getMeals().clear();
         r.getMeals().addAll(restaurant.getMeals());
+        // The invocation of flush() below is mandatory for successful passing of "updateById_withExistingName" test
+        restaurantRepository.flush();
 
     }
 

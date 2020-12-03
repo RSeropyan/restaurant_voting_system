@@ -20,12 +20,10 @@ public class ManualRunner {
 
         RestaurantService restaurantService = (RestaurantService) ctx.getBean("restaurantService");
 
-        Restaurant restaurant = new Restaurant(1, "MacDonalds", 100);
+        Restaurant restaurant = new Restaurant(2, "Marcellis", 100);
         List<Meal> meals = new ArrayList<>();
-        Meal meal = new Meal(null, "Sandwich", MealCategory.MAIN, 200, restaurant);
-        meals.add(meal);
         restaurant.setMeals(meals);
-        restaurantService.updateById(1, restaurant);
+        restaurantService.updateById(2, restaurant);
 
     }
 
