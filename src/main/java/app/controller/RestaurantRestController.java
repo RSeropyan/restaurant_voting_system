@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.entity.Restaurant;
+import app.service.RestaurantSorter;
 import app.service.RestaurantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,11 +32,12 @@ public class RestaurantRestController {
     public ResponseEntity<List<Restaurant>> getAll(
             @RequestParam(name = "currentPage", required = false) Integer currentPage,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "sort", required = false) Sort sort) {
+            @RequestParam(name = "sortBy", required = false) RestaurantSorter sorter,
+            @RequestParam(name = "sortDirection", required = false) Sort.Direction sortDirection) {
 
         logger.info("Controller layer: Returning all restaurants");
 
-        List<Restaurant> restaurants = restaurantService.getAll(currentPage, pageSize, sort);
+        List<Restaurant> restaurants = restaurantService.getAll(currentPage, pageSize, sorter, sortDirection);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=UTF-8");
         headers.add("Cache-Control", "no-store");

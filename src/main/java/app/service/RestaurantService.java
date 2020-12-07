@@ -25,7 +25,8 @@ public class RestaurantService {
 
     private static final Integer DEFAULT_CURRENT_PAGE = 0;
     private static final Integer DEFAULT_PAGE_SIZE = Integer.MAX_VALUE;
-    private static final String DEFAULT_PROPERTY_TO_SORT_BY = "votes";
+    private static final RestaurantSorter DEFAULT_SORTED_BY = RestaurantSorter.byVOTES;
+    private static final Sort.Direction DEFAULT_SORT_DIRECTION = Sort.Direction.DESC;
 
     private final RestaurantRepository restaurantRepository;
 
@@ -47,14 +48,21 @@ public class RestaurantService {
         return restaurantRepository.findAll().size();
     }
 
-    public List<Restaurant> getAll(@Nullable Integer currentPage, @Nullable Integer pageSize, @Nullable Sort sort) {
+    public List<Restaurant> getAll(
+            @Nullable Integer currentPage,
+            @Nullable Integer pageSize,
+            @Nullable RestaurantSorter sorter,
+            @Nullable Sort.Direction sortDirection) {
+
         logger.info("Restaurant Service layer: Returning all restaurants.");
 
-        currentPage = (currentPage == null ? DEFAULT_CURRENT_PAGE : currentPage);
-        pageSize = (pageSize == null ? DEFAULT_PAGE_SIZE : pageSize);
-        sort = (sort == null ? Sort.by(DEFAULT_PROPERTY_TO_SORT_BY).descending() : sort);
-        Pageable pageable = PageRequest.of(currentPage, pageSize, sort);
+        currentPage   = (currentPage == null    ? DEFAULT_CURRENT_PAGE             : currentPage);
+        pageSize      = (pageSize == null       ? DEFAULT_PAGE_SIZE                : pageSize);
+        sortDirection = (sortDirection == null) ? DEFAULT_SORT_DIRECTION           : sortDirection;
+        String sortBy = (sorter == null)        ? DEFAULT_SORTED_BY.getFieldName() : sorter.getFieldName();
 
+        Sort sort = Sort.by(sortDirection, sortBy);
+        Pageable pageable = PageRequest.of(currentPage, pageSize, sort);
         return restaurantRepository.findAll(pageable).getContent();
     }
 
