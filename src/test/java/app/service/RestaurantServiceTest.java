@@ -2,8 +2,8 @@ package app.service;
 
 import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -15,12 +15,12 @@ import static app.service.testdata.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class RestaurantServiceTest extends ServiceTest {
+public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Autowired
     private RestaurantService restaurantService;
 
-    @Before
+    @BeforeEach
     public void refreshTestData() {
         initializeTestData();
     }

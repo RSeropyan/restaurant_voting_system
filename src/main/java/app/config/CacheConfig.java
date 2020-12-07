@@ -9,14 +9,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@EnableCaching
+//@EnableCaching
 public class CacheConfig {
 
-    @Bean
-    @Profile("dev")
-    public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("restaurants", "meals");
-    }
+//    @Bean
+//    @Profile("dev")
+//    public CacheManager cacheManager() {
+//        return new ConcurrentMapCacheManager("restaurants", "meals");
+//    }
 
 //    @Bean
 //    @Profile("test")
