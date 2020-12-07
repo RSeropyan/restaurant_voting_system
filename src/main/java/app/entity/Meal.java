@@ -1,5 +1,7 @@
 package app.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,7 +18,8 @@ public class Meal {
 
     private Integer price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @ManyToOne
     @JoinColumn(name = "restaurant")
     private Restaurant restaurant;
 

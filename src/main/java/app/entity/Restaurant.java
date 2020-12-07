@@ -1,5 +1,7 @@
 package app.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,7 +16,8 @@ public class Restaurant {
 
     private Integer votes;
 
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Meal> meals;
 
     public Restaurant() {
