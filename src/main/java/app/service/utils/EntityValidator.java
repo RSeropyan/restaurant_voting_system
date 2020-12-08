@@ -9,37 +9,28 @@ public class EntityValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(EntityValidator.class);
 
-    public static boolean checkNotNullId(Integer id) {
+    public static void checkNotNullId(Integer id) {
         logger.info("Checking id value = {} for NotNull constraint.", id);
-        if (id != null) {
-            return true;
-        }
-        else {
+        if (id == null) {
             throw new IllegalArgumentException("The entity id must not be null.");
         }
     }
 
-    public static boolean checkNullId(Integer id) {
+    public static void checkNullId(Integer id) {
         logger.info("Checking id value = {} for Null constraint.", id);
-        if (id == null) {
-            return true;
-        }
-        else {
+        if (id != null) {
             throw new IllegalArgumentException("The entity id must be null.");
         }
     }
 
-    public static <T> boolean checkNotNullInstance(T entity) {
+    public static <T> void checkNotNullInstance(T entity) {
         logger.info("Checking entity instance for NotNull constraint.");
-        if (entity != null) {
-            return true;
-        }
-        else {
+        if (entity == null) {
             throw new IllegalArgumentException("The entity must not be null.");
         }
     }
 
-    public static <T> boolean checkNotNullProperties(T entity) {
+    public static <T> void checkNotNullProperties(T entity) {
         Field[] fields = entity.getClass().getDeclaredFields();
         for (Field field : fields) {
             try {
@@ -55,7 +46,6 @@ public class EntityValidator {
                 e.printStackTrace();
             }
         }
-        return true;
     }
 
 }
