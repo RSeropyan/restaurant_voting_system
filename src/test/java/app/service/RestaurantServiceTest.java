@@ -2,6 +2,7 @@ package app.service;
 
 import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
+import app.service.utils.RestaurantSorter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Autowired
     private RestaurantService restaurantService;
+
+    @Autowired
+    private VotingService votingService;
 
     @BeforeEach
     public void refreshTestData() {
@@ -189,6 +193,14 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    public void updateById_withNonExistingId() {
+        Integer id = -1;
+        assertThatThrownBy(() -> restaurantService.updateById(id, new Restaurant()))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Restaurant with id=" + id + " not found.");
+    }
+
+    @Test
     public void updateById_withExistingName() {
         testRestaurant3.setName(testRestaurant1.getName());
         assertThatThrownBy( () -> restaurantService.updateById(2, testRestaurant3))
@@ -217,6 +229,31 @@ public class RestaurantServiceTest extends AbstractServiceTest {
         assertThatThrownBy(() -> { restaurantService.updateById(1, testRestaurant3); })
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity's properties must not be null (except id).");
+    }
+
+    @Test
+    public void voteById() {
+        Restaurant restaurant = restaurantService.getById(1);
+        Integer initialNumberOfVotes = restaurant.getVotes();
+        votingService.voteById(1);
+        restaurant = restaurantService.getById(1);
+        Integer incrementedNumberOfVotes = restaurant.getVotes();
+        assertThat(++initialNumberOfVotes).isEqualTo(incrementedNumberOfVotes);
+    }
+
+    @Test
+    public void voteById_withNullId() {
+        assertThatThrownBy(() -> votingService.voteById(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("The entity id must not be null.");
+    }
+
+    @Test
+    public void voteById_withNonExistingId() {
+        Integer id = -1;
+        assertThatThrownBy(() -> votingService.voteById(id))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Restaurant with id=" + id + " not found.");
     }
 
 }

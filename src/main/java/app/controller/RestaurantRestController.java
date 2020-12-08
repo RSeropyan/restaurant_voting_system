@@ -1,7 +1,7 @@
 package app.controller;
 
 import app.entity.Restaurant;
-import app.service.RestaurantSorter;
+import app.service.utils.RestaurantSorter;
 import app.service.RestaurantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

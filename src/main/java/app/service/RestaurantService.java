@@ -4,6 +4,7 @@ import app.dao.RestaurantRepository;
 import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
 import app.service.utils.EntityValidator;
+import app.service.utils.RestaurantSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheConfig;
