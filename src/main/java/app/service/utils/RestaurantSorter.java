@@ -1,9 +1,9 @@
 package app.service.utils;
 
 public enum RestaurantSorter {
-    byID("id"),           // default
-    byNAME("name"),
-    byVOTES("votes");
+    ID("id"),           // default
+    NAME("name"),
+    VOTES("votes");
 
     private final String fieldName;
 

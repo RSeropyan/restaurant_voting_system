@@ -68,7 +68,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     public void getAll_withSortedById() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
-        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, RestaurantSorter.byID, null);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, RestaurantSorter.ID, null);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
                 .usingRecursiveComparison().isEqualTo(testRestaurants);
     }
@@ -76,7 +76,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     public void getAll_withSortedByVotesAscending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
-        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, RestaurantSorter.byVOTES, Sort.Direction.ASC);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, RestaurantSorter.VOTES, Sort.Direction.ASC);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
                 .usingRecursiveComparison().isEqualTo(testRestaurants);
     }
@@ -84,7 +84,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     public void getAll_withSortedByVotesDescending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
-        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, RestaurantSorter.byVOTES, Sort.Direction.DESC);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, RestaurantSorter.VOTES, Sort.Direction.DESC);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
                 .usingRecursiveComparison().isEqualTo(testRestaurants);
     }
@@ -92,7 +92,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     public void getAll_withSortedByNameAscending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
-        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, RestaurantSorter.byNAME, Sort.Direction.ASC);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, RestaurantSorter.NAME, Sort.Direction.ASC);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
                 .usingRecursiveComparison().isEqualTo(testRestaurants);
     }
@@ -100,7 +100,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     public void getAll_withSortedByNameDescending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
-        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, RestaurantSorter.byNAME, Sort.Direction.DESC);
+        List<Restaurant> realRestaurants = restaurantService.getAll(null, null, RestaurantSorter.NAME, Sort.Direction.DESC);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
                 .usingRecursiveComparison().isEqualTo(testRestaurants);
     }

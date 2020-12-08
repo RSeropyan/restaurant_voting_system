@@ -1,5 +1,7 @@
 package app.config;
 
+import app.controller.converters.StringToRestaurantSorterConverter;
+import app.controller.converters.StringToSortDirectionConverter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -13,7 +15,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-
+        registry.addConverter(new StringToRestaurantSorterConverter());
+        registry.addConverter(new StringToSortDirectionConverter());
     }
 
 }
