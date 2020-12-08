@@ -22,7 +22,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     private RestaurantService restaurantService;
 
     @Autowired
-    private VotingService votingService;
+    private RestaurantVotingService restaurantVotingService;
 
     @BeforeEach
     public void refreshTestData() {
@@ -235,7 +235,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     public void voteById() {
         Restaurant restaurant = restaurantService.getById(1);
         Integer initialNumberOfVotes = restaurant.getVotes();
-        votingService.voteById(1);
+        restaurantVotingService.voteById(1);
         restaurant = restaurantService.getById(1);
         Integer incrementedNumberOfVotes = restaurant.getVotes();
         assertThat(++initialNumberOfVotes).isEqualTo(incrementedNumberOfVotes);
@@ -243,7 +243,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     public void voteById_withNullId() {
-        assertThatThrownBy(() -> votingService.voteById(null))
+        assertThatThrownBy(() -> restaurantVotingService.voteById(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity id must not be null.");
     }
@@ -251,7 +251,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     public void voteById_withNonExistingId() {
         Integer id = -1;
-        assertThatThrownBy(() -> votingService.voteById(id))
+        assertThatThrownBy(() -> restaurantVotingService.voteById(id))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Restaurant with id=" + id + " not found.");
     }

@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class VotingService {
+public class RestaurantVotingService {
 
     private final RestaurantRepository restaurantRepository;
 
-    public VotingService(RestaurantRepository restaurantRepository) {
+    public RestaurantVotingService(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
     }
 
