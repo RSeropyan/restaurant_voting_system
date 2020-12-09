@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +19,11 @@ import static app.service.testdata.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class RestaurantServiceTest extends AbstractServiceTest {
+//@ActiveProfiles("dev")
+@SpringJUnitConfig(app.config.DbConfig.class)
+@Sql(scripts = "/mysql_script.sql")
+@Transactional
+public class RestaurantServiceTest {
 
     @Autowired
     private RestaurantService restaurantService;
