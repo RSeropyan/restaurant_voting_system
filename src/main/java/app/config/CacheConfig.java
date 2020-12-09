@@ -13,13 +13,11 @@ import org.springframework.context.annotation.Profile;
 public class CacheConfig {
 
 //    @Bean
-//    @Profile("dev")
 //    public CacheManager cacheManager() {
 //        return new ConcurrentMapCacheManager("restaurants", "meals");
 //    }
 
 //    @Bean
-//    @Profile("test")
 //    public CacheManager cacheManager() {
 //        return new NoOpCacheManager();
 //    }
