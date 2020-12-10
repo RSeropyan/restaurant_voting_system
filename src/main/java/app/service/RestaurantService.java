@@ -1,6 +1,8 @@
 package app.service;
 
+import app.dao.MealRepository;
 import app.dao.RestaurantRepository;
+import app.entity.Meal;
 import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
 import app.service.utils.EntityValidator;
@@ -19,7 +21,7 @@ import java.util.List;
 
 @Service
 @Transactional
-@CacheConfig(cacheNames = {"restaurants"})
+@CacheConfig(cacheNames = {"restaurants", "meals"})
 public class RestaurantService {
 
     private final Logger logger = LoggerFactory.getLogger(app.service.RestaurantService.class);
@@ -30,12 +32,17 @@ public class RestaurantService {
     private static final Sort.Direction DEFAULT_SORT_DIRECTION = Sort.Direction.DESC;
 
     private final RestaurantRepository restaurantRepository;
+    private final MealRepository mealRepository;
 
-    public RestaurantService(RestaurantRepository restaurantRepository) {
+    public RestaurantService(RestaurantRepository restaurantRepository, MealRepository mealRepository) {
         this.restaurantRepository = restaurantRepository;
+        this.mealRepository = mealRepository;
     }
 
-    public Restaurant getById(Integer id) {
+    // Get Methods ----------------------------------------------------------
+
+    // Tested
+    public Restaurant getRestaurantById(Integer id) {
 
         EntityValidator.checkNotNullId(id);
         logger.info("Restaurant Service layer: Returning restaurant with id = {}.", id);
@@ -44,12 +51,8 @@ public class RestaurantService {
 
     }
 
-    public Integer getTotalNumber() {
-        logger.info("Restaurant Service layer: Returning total number of restaurants.");
-        return restaurantRepository.findAll().size();
-    }
-
-    public List<Restaurant> getAll(
+    // Tested
+    public List<Restaurant> getAllRestaurants(
             @Nullable Integer currentPage,
             @Nullable Integer pageSize,
             @Nullable RestaurantSorter sorter,
@@ -66,6 +69,24 @@ public class RestaurantService {
         Pageable pageable = PageRequest.of(currentPage, pageSize, sort);
         return restaurantRepository.findAll(pageable).getContent();
     }
+
+    // Not Tested
+    public Meal getMealById(Integer id) {
+        logger.info("Meal Service layer: Returning meal with id = {}", id);
+
+        return mealRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found.")) ;
+    }
+
+    // Not Tested
+    public List<Meal> getAllMealsByRestaurantId(Integer id) {
+        EntityValidator.checkNotNullId(id);
+        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
+        logger.info("Restaurant Service layer: Returning all meals for restaurant with id = {}.", id);
+        return restaurant.getMeals();
+    }
+
+    // ----------------------------------------------------------------------
 
     public void deleteById(Integer id) {
 

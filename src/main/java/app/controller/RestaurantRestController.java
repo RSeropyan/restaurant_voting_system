@@ -37,7 +37,7 @@ public class RestaurantRestController {
 
         logger.info("Controller layer: Returning all restaurants");
 
-        List<Restaurant> restaurants = restaurantService.getAll(currentPage, pageSize, sorter, sortDirection);
+        List<Restaurant> restaurants = restaurantService.getAllRestaurants(currentPage, pageSize, sorter, sortDirection);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=UTF-8");
         headers.add("Cache-Control", "no-store");
