@@ -5,7 +5,7 @@ import app.dao.RestaurantRepository;
 import app.entity.Meal;
 import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
-import app.service.utils.EntityValidator;
+import app.service.utils.ValidatorUtil;
 import app.service.utils.RestaurantSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,26 +40,23 @@ public class RestaurantService {
         this.mealRepository = mealRepository;
     }
 
-    // Get Methods ----------------------------------------------------------
+    // Retrieve Methods ----------------------------------------------------------
 
     // Tested
     public Restaurant getRestaurantById(Integer id) {
-
-        EntityValidator.checkNotNullId(id);
+        ValidatorUtil.checkNotNullId(id);
         logger.info("Restaurant Service layer: Returning restaurant with id = {}.", id);
         return restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
-
     }
 
     // Tested
+    // Must be @Cacheable
     public List<Restaurant> getAllRestaurants(
             @Nullable Integer currentPage,
             @Nullable Integer pageSize,
             @Nullable RestaurantSorter sorter,
             @Nullable Sort.Direction sortDirection) {
-
-        logger.info("Restaurant Service layer: Returning all restaurants.");
 
         currentPage   = (currentPage == null    ? DEFAULT_CURRENT_PAGE             : currentPage);
         pageSize      = (pageSize == null       ? DEFAULT_PAGE_SIZE                : pageSize);
@@ -67,20 +65,20 @@ public class RestaurantService {
 
         Sort sort = Sort.by(sortDirection, sortBy);
         Pageable pageable = PageRequest.of(currentPage, pageSize, sort);
+        logger.info("Restaurant Service layer: Returning all restaurants.");
         return restaurantRepository.findAll(pageable).getContent();
     }
 
     // Not Tested
     public Meal getMealById(Integer id) {
-        logger.info("Meal Service layer: Returning meal with id = {}", id);
-
+        logger.info("Restaurant Service layer: Returning meal with id = {}", id);
         return mealRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found.")) ;
     }
 
     // Not Tested
     public List<Meal> getAllMealsByRestaurantId(Integer id) {
-        EntityValidator.checkNotNullId(id);
+        ValidatorUtil.checkNotNullId(id);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         logger.info("Restaurant Service layer: Returning all meals for restaurant with id = {}.", id);
         return restaurant.getMeals();
@@ -88,35 +86,81 @@ public class RestaurantService {
 
     // ----------------------------------------------------------------------
 
-    public void deleteById(Integer id) {
+    // Delete Methods -------------------------------------------------------
 
-        EntityValidator.checkNotNullId(id);
+    // Tested
+    // All caches must be evicted before return
+    public void deleteRestaurantById(Integer id) {
+        ValidatorUtil.checkNotNullId(id);
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurantRepository.delete(restaurant);
         logger.info("Restaurant Service layer: Restaurant with id = {} has been removed.", id);
-
     }
 
+    // Not Tested
+    // All caches must be evicted before return
+    public void deleteAllRestaurants() {
+        restaurantRepository.deleteAll();
+        logger.info("Restaurant Service layer: All restaurants have been removed.");
+    }
+
+    // Not Tested
+    // All caches must be evicted before return
+    public void deleteMealById(Integer id) {
+        ValidatorUtil.checkNotNullId(id);
+        boolean exists = mealRepository.existsById(id);
+        if (exists) {
+            mealRepository.deleteById(id);
+            logger.info("Restaurant Service layer: Meal with id = {} has been removed.", id);
+        }
+        else {
+            throw new EntityNotFoundException("Meal with id=" + id + " not found.");
+        }
+    }
+
+    // Not Tested
+    // All caches must be evicted before return
+    public void deleteAllMeals() {
+        mealRepository.deleteAll();
+        logger.info("Restaurant Service layer: All meals have been removed.");
+    }
+
+    // Not Tested
+    // All caches must be evicted before return
+    public void deleteAllMealsByRestaurantId(Integer id) {
+        ValidatorUtil.checkNotNullId(id);
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
+        restaurant.setMeals(new ArrayList<>());
+        restaurantRepository.flush();
+    }
+
+    // ----------------------------------------------------------------------
+
+    // Tested
+    // All caches must be evicted before return
     public Restaurant create(Restaurant restaurant) {
 
-        EntityValidator.checkNotNullInstance(restaurant);
+        ValidatorUtil.checkNotNullInstance(restaurant);
         Integer id = restaurant.getId();
-        EntityValidator.checkNullId(id);
-        EntityValidator.checkNotNullProperties(restaurant);
+        ValidatorUtil.checkNullId(id);
+        ValidatorUtil.checkNotNullProperties(restaurant);
 
         logger.info("Restaurant Service layer: Creating new restaurant.");
         return restaurantRepository.save(restaurant);
 
     }
 
+    // Tested
+    // All caches must be evicted before return
     public void updateById(Integer id, Restaurant restaurant) {
 
-        EntityValidator.checkNotNullId(id);
+        ValidatorUtil.checkNotNullId(id);
         Restaurant r = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
-        EntityValidator.checkNotNullInstance(restaurant);
-        EntityValidator.checkNotNullProperties(restaurant);
+        ValidatorUtil.checkNotNullInstance(restaurant);
+        ValidatorUtil.checkNotNullProperties(restaurant);
 
         r.setName(restaurant.getName());
         r.setVotes(restaurant.getVotes());
@@ -126,5 +170,6 @@ public class RestaurantService {
         restaurantRepository.flush();
 
     }
+
 
 }

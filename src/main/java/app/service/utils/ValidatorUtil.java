@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 
-public class EntityValidator {
+public class ValidatorUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(EntityValidator.class);
+    private static final Logger logger = LoggerFactory.getLogger(ValidatorUtil.class);
 
     public static void checkNotNullId(Integer id) {
         logger.info("Checking id value = {} for NotNull constraint.", id);

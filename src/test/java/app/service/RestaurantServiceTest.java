@@ -124,7 +124,7 @@ public class RestaurantServiceTest {
     @Test
     public void deleteById() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2);
-        restaurantService.deleteById(1);
+        restaurantService.deleteRestaurantById(1);
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(null, null, null, null);
         assertThat(realRestaurants)
                 .hasSameSizeAs(testRestaurants)
@@ -134,14 +134,14 @@ public class RestaurantServiceTest {
     @Test
     public void deleteById_withNonExistingId() {
         Integer id = -1;
-        assertThatThrownBy(() -> restaurantService.deleteById(id))
+        assertThatThrownBy(() -> restaurantService.deleteRestaurantById(id))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Restaurant with id=" + id + " not found.");
     }
 
     @Test
     public void deleteById_withNullId() {
-        assertThatThrownBy(() -> restaurantService.deleteById(null))
+        assertThatThrownBy(() -> restaurantService.deleteRestaurantById(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity id must not be null.");
     }
