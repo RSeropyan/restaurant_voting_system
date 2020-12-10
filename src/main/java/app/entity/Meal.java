@@ -26,12 +26,10 @@ public class Meal {
     public Meal() {
     }
 
-    public Meal(Integer id, String name, MealCategory category, Integer price, Restaurant restaurant) {
-        this.id = id;
+    public Meal(String name, MealCategory category, Integer price) {
         this.name = name;
         this.category = category;
         this.price = price;
-        this.restaurant = restaurant;
     }
 
     public Integer getId() {

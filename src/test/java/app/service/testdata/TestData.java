@@ -21,20 +21,40 @@ public class TestData {
     public static void initializeTestData() {
 
         testRestaurant1 = new Restaurant(1, "Marcellis", 3);
-        Meal meal1 = new Meal(1, "Ceaser Salad", MealCategory.SALAD, 350, testRestaurant1);
-        Meal meal2 = new Meal(2, "Tomato Soup", MealCategory.SOUP, 290, testRestaurant1);
-        Meal meal3 = new Meal(3, "Four Seasons pizza", MealCategory.MAIN, 560, testRestaurant1);
-        Meal meal4 = new Meal(4, "Apple pie", MealCategory.DESERT, 250, testRestaurant1);
-        Meal meal5 = new Meal(5, "Latte", MealCategory.DRINK, 350, testRestaurant1);
+        Meal meal1 = new Meal("Ceaser Salad", MealCategory.SALAD, 350);
+        meal1.setId(1);
+        meal1.setRestaurant(testRestaurant1);
+        Meal meal2 = new Meal("Tomato Soup", MealCategory.SOUP, 290);
+        meal2.setId(2);
+        meal2.setRestaurant(testRestaurant1);
+        Meal meal3 = new Meal("Four Seasons pizza", MealCategory.MAIN, 560);
+        meal3.setId(3);
+        meal3.setRestaurant(testRestaurant1);
+        Meal meal4 = new Meal("Apple pie", MealCategory.DESERT, 250);
+        meal4.setId(4);
+        meal4.setRestaurant(testRestaurant1);
+        Meal meal5 = new Meal("Latte", MealCategory.DRINK, 350);
+        meal5.setId(5);
+        meal5.setRestaurant(testRestaurant1);
         List<Meal> meals1 = Arrays.asList(meal1, meal2, meal3, meal4, meal5);
         testRestaurant1.setMeals(meals1);
 
         testRestaurant2 = new Restaurant(2, "Phalli Khinkali", 9);
-        Meal meal6 = new Meal(6, "Georgian Salad", MealCategory.SALAD, 290, testRestaurant2);
-        Meal meal7 = new Meal(7, "Kharcho Soup", MealCategory.SOUP, 310, testRestaurant2);
-        Meal meal8 = new Meal(8, "Chicken Kebab", MealCategory.MAIN, 360, testRestaurant2);
-        Meal meal9 = new Meal(9, "Chocolate", MealCategory.DESERT, 200, testRestaurant2);
-        Meal meal10 = new Meal(10, "Tea", MealCategory.DRINK, 250, testRestaurant2);
+        Meal meal6 = new Meal("Georgian Salad", MealCategory.SALAD, 290);
+        meal6.setId(6);
+        meal6.setRestaurant(testRestaurant2);
+        Meal meal7 = new Meal("Kharcho Soup", MealCategory.SOUP, 310);
+        meal7.setId(7);
+        meal7.setRestaurant(testRestaurant2);
+        Meal meal8 = new Meal("Chicken Kebab", MealCategory.MAIN, 360);
+        meal8.setId(8);
+        meal8.setRestaurant(testRestaurant2);
+        Meal meal9 = new Meal("Chocolate", MealCategory.DESERT, 200);
+        meal9.setId(9);
+        meal9.setRestaurant(testRestaurant2);
+        Meal meal10 = new Meal("Tea", MealCategory.DRINK, 250);
+        meal10.setId(10);
+        meal10.setRestaurant(testRestaurant2);
         List<Meal> meals2 = Arrays.asList(meal6, meal7, meal8, meal9, meal10);
         testRestaurant2.setMeals(meals2);
 
