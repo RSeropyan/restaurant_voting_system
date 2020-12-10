@@ -148,20 +148,20 @@ public class RestaurantServiceTest {
 
     @Test
     public void create() {
-        Restaurant realRestaurant = restaurantService.create(testRestaurant3);
+        Restaurant realRestaurant = restaurantService.createRestaurant(testRestaurant3);
         assertThat(realRestaurant).usingRecursiveComparison().isEqualTo(testRestaurant3);
     }
 
     @Test
     public void create_withExistingName() {
         testRestaurant3.setName(testRestaurant1.getName());
-        assertThatThrownBy(() -> restaurantService.create(testRestaurant3))
+        assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
     @Test
     public void create_withNullEntity() {
-        assertThatThrownBy(() -> restaurantService.create(null))
+        assertThatThrownBy(() -> restaurantService.createRestaurant(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity must not be null.");
     }
@@ -169,7 +169,7 @@ public class RestaurantServiceTest {
     @Test
     public void create_withNotNullEntityId() {
         testRestaurant3.setId(0);
-        assertThatThrownBy(() -> restaurantService.create(testRestaurant3))
+        assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity id must be null.");
     }
@@ -179,7 +179,7 @@ public class RestaurantServiceTest {
         testRestaurant3.setName(null);
         testRestaurant3.setVotes(null);
         testRestaurant3.setMeals(null);
-        assertThatThrownBy(() -> restaurantService.create(testRestaurant3))
+        assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity's properties must not be null (except id).");
     }

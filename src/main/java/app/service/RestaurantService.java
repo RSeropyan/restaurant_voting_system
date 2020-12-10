@@ -140,17 +140,29 @@ public class RestaurantService {
 
     // Tested
     // All caches must be evicted before return
-    public Restaurant create(Restaurant restaurant) {
-
+    public Restaurant createRestaurant(Restaurant restaurant) {
         ValidatorUtil.checkNotNullInstance(restaurant);
         Integer id = restaurant.getId();
         ValidatorUtil.checkNullId(id);
         ValidatorUtil.checkNotNullProperties(restaurant);
-
         logger.info("Restaurant Service layer: Creating new restaurant.");
         return restaurantRepository.save(restaurant);
-
     }
+
+    // Not Tested
+    // All caches must be evicted before return
+    public Restaurant createMealForRestaurantWithId(Integer id, Meal meal) {
+        ValidatorUtil.checkNotNullId(id);
+        ValidatorUtil.checkNotNullInstance(meal);
+        ValidatorUtil.checkNotNullProperties(meal);
+        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
+        restaurant.getMeals().add(meal);
+        restaurantRepository.flush();
+        logger.info("Restaurant Service layer: Creating new meal for restaurant with id = {}.", id);
+        return restaurant;
+    }
+
+    // ----------------------------------------------------------------------
 
     // Tested
     // All caches must be evicted before return

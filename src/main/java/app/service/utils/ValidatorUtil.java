@@ -35,11 +35,11 @@ public class ValidatorUtil {
         for (Field field : fields) {
             try {
                 field.setAccessible(true);
-                if(!field.getName().equals("id")) {
+                if(!field.getName().equals("id") && !field.getName().equals("restaurant")) {
                     Object o = field.get(entity);
                     logger.info("Checking entity property {} = {} for NotNull constraint.", field.getName(), o);
                     if (o == null) {
-                        throw new IllegalArgumentException("The entity's properties must not be null (except id).");
+                        throw new IllegalArgumentException("The entity's properties must not be null (except id and restaurant).");
                     }
                 }
             } catch (IllegalAccessException e) {
