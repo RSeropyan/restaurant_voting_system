@@ -13,6 +13,7 @@ public class TestData {
     public static Restaurant testRestaurant1;
     public static Restaurant testRestaurant2;
     public static Restaurant testRestaurant3;
+    public static Meal meal1;
 
     static {
         initializeTestData();
@@ -21,7 +22,7 @@ public class TestData {
     public static void initializeTestData() {
 
         testRestaurant1 = new Restaurant(1, "Marcellis", 3);
-        Meal meal1 = new Meal("Ceaser Salad", MealCategory.SALAD, 350);
+        meal1 = new Meal("Ceaser Salad", MealCategory.SALAD, 350);
         meal1.setId(1);
         meal1.setRestaurant(testRestaurant1);
         Meal meal2 = new Meal("Tomato Soup", MealCategory.SOUP, 290);

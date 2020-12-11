@@ -69,14 +69,15 @@ public class RestaurantService {
         return restaurantRepository.findAll(pageable).getContent();
     }
 
-    // Not Tested
+    // Tested
     public Meal getMealById(Integer id) {
+        ValidatorUtil.checkNotNullId(id);
         logger.info("Restaurant Service layer: Returning meal with id = {}", id);
         return mealRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found.")) ;
     }
 
-    // Not Tested
+    // Tested
     public List<Meal> getAllMealsByRestaurantId(Integer id) {
         ValidatorUtil.checkNotNullId(id);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));

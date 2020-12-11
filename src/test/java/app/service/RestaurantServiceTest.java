@@ -1,5 +1,6 @@
 package app.service;
 
+import app.entity.Meal;
 import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
 import app.service.utils.RestaurantSorter;
@@ -34,6 +35,48 @@ public class RestaurantServiceTest {
     @BeforeEach
     public void refreshTestData() {
         initializeTestData();
+    }
+
+    @Test
+    public void getMealById() {
+        Meal realMeal = restaurantService.getMealById(1);
+        assertThat(realMeal).usingRecursiveComparison().isEqualTo(meal1);
+    }
+
+    @Test
+    public void getMealById_withNonExistingId() {
+        Integer id = -1;
+        assertThatThrownBy(() -> restaurantService.getMealById(id))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Meal with id=" + id + " not found.");
+    }
+
+    @Test
+    public void getMealById_withNullId() {
+        assertThatThrownBy(() -> restaurantService.getMealById(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("The entity id must not be null.");
+    }
+
+    @Test
+    public void getAllMealsByRestaurantId() {
+        List<Meal> realMeals = restaurantService.getAllMealsByRestaurantId(1);
+        assertThat(realMeals).usingRecursiveComparison().isEqualTo(testRestaurant1.getMeals());
+    }
+
+    @Test
+    public void getAllMealsByRestaurantId_withNonExistingId() {
+        Integer id = -1;
+        assertThatThrownBy(() -> restaurantService.getAllMealsByRestaurantId(id))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Restaurant with id=" + id + " not found.");
+    }
+
+    @Test
+    public void getAllMealsByRestaurantId_withNullId() {
+        assertThatThrownBy(() -> restaurantService.getAllMealsByRestaurantId(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("The entity id must not be null.");
     }
 
     @Test
