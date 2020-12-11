@@ -148,8 +148,9 @@ public class RestaurantServiceTest {
 
     @Test
     public void createRestaurant() {
-        Restaurant realRestaurant = restaurantService.createRestaurant(testRestaurant3);
-        assertThat(realRestaurant).usingRecursiveComparison().isEqualTo(testRestaurant3);
+        Integer realRestaurantId = restaurantService.createRestaurant(testRestaurant3);
+        testRestaurant3.setId(3);
+        assertThat(realRestaurantId).isEqualTo(testRestaurant3.getId());
     }
 
     @Test

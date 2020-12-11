@@ -142,18 +142,19 @@ public class RestaurantService {
 
     // Tested
     // All caches must be evicted before return
-    public Restaurant createRestaurant(Restaurant restaurant) {
+    public Integer createRestaurant(Restaurant restaurant) {
         ValidatorUtil.checkNotNullInstance(restaurant);
         Integer id = restaurant.getId();
         ValidatorUtil.checkNullId(id);
         ValidatorUtil.checkNotNullProperties(restaurant);
+        restaurantRepository.save(restaurant);
         logger.info("Restaurant Service layer: Creating new restaurant.");
-        return restaurantRepository.save(restaurant);
+        return restaurant.getId();
     }
 
     // Not Tested
     // All caches must be evicted before return
-    public Restaurant createMealForRestaurantWithId(Integer id, Meal meal) {
+    public Integer createMealForRestaurantWithId(Integer id, Meal meal) {
         ValidatorUtil.checkNotNullId(id);
         ValidatorUtil.checkNotNullInstance(meal);
         ValidatorUtil.checkNotNullProperties(meal);
@@ -161,7 +162,7 @@ public class RestaurantService {
         restaurant.getMeals().add(meal);
         restaurantRepository.flush();
         logger.info("Restaurant Service layer: Creating new meal for restaurant with id = {}.", id);
-        return restaurant;
+        return meal.getId();
     }
 
     // ----------------------------------------------------------------------
@@ -182,6 +183,7 @@ public class RestaurantService {
         r.getMeals().clear();
         r.getMeals().addAll(restaurant.getMeals());
         // The invocation of flush() below is mandatory for successful passing of "updateRestaurantById_withExistingName" test
+        logger.info("Restaurant Service layer: Updating restaurant with id = {}.", id);
         restaurantRepository.flush();
     }
 
@@ -197,6 +199,7 @@ public class RestaurantService {
         m.setCategory(meal.getCategory());
         m.setPrice(meal.getPrice());
         // The invocation of flush() below is mandatory for successful passing of "updateMealById_withExistingNameAndRestaurant" test
+        logger.info("Restaurant Service layer: Updating meal with id = {}.", id);
         mealRepository.flush();
     }
 
