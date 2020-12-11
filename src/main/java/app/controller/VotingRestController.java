@@ -25,7 +25,7 @@ public class VotingRestController {
     @PostMapping("/restaurants/{id}")
     public ResponseEntity voteById(@PathVariable Integer id) {
         logger.info("Controller layer: voting for Restaurant with id = {}", id);
-        restaurantVotingService.voteById(id);
+        restaurantVotingService.voteForRestaurantById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -185,6 +185,8 @@ public class RestaurantService {
         restaurantRepository.flush();
     }
 
+    // Not Tested
+    // All caches must be evicted before return
     public void updateMealById(Integer id, Meal meal) {
         ValidatorUtil.checkNotNullId(id);
         ValidatorUtil.checkNotNullInstance(meal);

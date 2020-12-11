@@ -17,7 +17,7 @@ public class RestaurantVotingService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public void voteById(Integer id) {
+    public void voteForRestaurantById(Integer id) {
         ValidatorUtil.checkNotNullId(id);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         Integer currentNumberOfVotes = restaurant.getVotes();

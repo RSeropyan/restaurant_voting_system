@@ -37,13 +37,13 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getById() {
+    public void getRestaurantById() {
         Restaurant realRestaurant1 = restaurantService.getRestaurantById(1);
         assertThat(realRestaurant1).usingRecursiveComparison().isEqualTo(testRestaurant1);
     }
 
     @Test
-    public void getById_withNonExistingId() {
+    public void getRestaurantById_withNonExistingId() {
         int id = -1;
         assertThatThrownBy(() -> restaurantService.getRestaurantById(id))
                 .isInstanceOf(EntityNotFoundException.class)
@@ -51,14 +51,14 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getById_withNullId() {
+    public void getRestaurantById_withNullId() {
         assertThatThrownBy(() -> restaurantService.getRestaurantById(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity id must not be null.");
     }
 
     @Test
-    public void getAll_withNotPageableNotSorted() {
+    public void getAllRestaurants_withNotPageableNotSorted() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(null, null, null, null);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
@@ -66,7 +66,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getAll_withSortedById() {
+    public void getAllRestaurants_withSortedById() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(null, null, RestaurantSorter.ID, null);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
@@ -74,7 +74,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getAll_withSortedByVotesAscending() {
+    public void getAllRestaurants_withSortedByVotesAscending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(null, null, RestaurantSorter.VOTES, Sort.Direction.ASC);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
@@ -82,7 +82,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getAll_withSortedByVotesDescending() {
+    public void getAllRestaurants_withSortedByVotesDescending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(null, null, RestaurantSorter.VOTES, Sort.Direction.DESC);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
@@ -90,7 +90,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getAll_withSortedByNameAscending() {
+    public void getAllRestaurants_withSortedByNameAscending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(null, null, RestaurantSorter.NAME, Sort.Direction.ASC);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
@@ -98,7 +98,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getAll_withSortedByNameDescending() {
+    public void getAllRestaurants_withSortedByNameDescending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(null, null, RestaurantSorter.NAME, Sort.Direction.DESC);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
@@ -106,7 +106,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getAll_withExpectedFirstPage() {
+    public void getAllRestaurants_withExpectedFirstPage() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2);
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(0, 1, null, null);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
@@ -114,7 +114,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getAll_withExpectedSecondPage() {
+    public void getAllRestaurants_withExpectedSecondPage() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1);
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(1, 1, null, null);
         assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
@@ -122,7 +122,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void deleteById() {
+    public void deleteRestaurantById() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2);
         restaurantService.deleteRestaurantById(1);
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(null, null, null, null);
@@ -132,7 +132,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void deleteById_withNonExistingId() {
+    public void deleteRestaurantById_withNonExistingId() {
         Integer id = -1;
         assertThatThrownBy(() -> restaurantService.deleteRestaurantById(id))
                 .isInstanceOf(EntityNotFoundException.class)
@@ -140,34 +140,34 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void deleteById_withNullId() {
+    public void deleteRestaurantById_withNullId() {
         assertThatThrownBy(() -> restaurantService.deleteRestaurantById(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity id must not be null.");
     }
 
     @Test
-    public void create() {
+    public void createRestaurant() {
         Restaurant realRestaurant = restaurantService.createRestaurant(testRestaurant3);
         assertThat(realRestaurant).usingRecursiveComparison().isEqualTo(testRestaurant3);
     }
 
     @Test
-    public void create_withExistingName() {
+    public void createRestaurant_withExistingName() {
         testRestaurant3.setName(testRestaurant1.getName());
         assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
     @Test
-    public void create_withNullEntity() {
+    public void createRestaurant_withNullEntity() {
         assertThatThrownBy(() -> restaurantService.createRestaurant(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity must not be null.");
     }
 
     @Test
-    public void create_withNotNullEntityId() {
+    public void createRestaurant_withNotNullEntityId() {
         testRestaurant3.setId(0);
         assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -175,17 +175,17 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void create_withNullProperties() {
+    public void createRestaurant_withNullProperties() {
         testRestaurant3.setName(null);
         testRestaurant3.setVotes(null);
         testRestaurant3.setMeals(null);
         assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The entity's properties must not be null (except id).");
+                .hasMessageContaining("The entity's properties must not be null (except id and restaurant).");
     }
 
     @Test
-    public void updateById() {
+    public void updateRestaurantById() {
         restaurantService.updateRestaurantById(2, testRestaurant3);
         Restaurant realRestaurant = restaurantService.getRestaurantById(2);
         testRestaurant3.setId(realRestaurant.getId());
@@ -193,65 +193,65 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void updateById_withNonExistingId() {
+    public void updateRestaurantById_withNonExistingId() {
         Integer id = -1;
-        assertThatThrownBy(() -> restaurantService.updateRestaurantById(id, new Restaurant()))
+        assertThatThrownBy(() -> restaurantService.updateRestaurantById(id, testRestaurant1))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Restaurant with id=" + id + " not found.");
     }
 
     @Test
-    public void updateById_withExistingName() {
+    public void updateRestaurantById_withExistingName() {
         testRestaurant3.setName(testRestaurant1.getName());
         assertThatThrownBy( () -> restaurantService.updateRestaurantById(2, testRestaurant3))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
     @Test
-    public void updateById_withNullEntity() {
+    public void updateRestaurantById_withNullEntity() {
         assertThatThrownBy(() -> restaurantService.updateRestaurantById(1, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity must not be null.");
     }
 
     @Test
-    public void updateById_withNullEntityId() {
+    public void updateRestaurantById_withNullEntityId() {
         assertThatThrownBy(() -> { restaurantService.updateRestaurantById(null, testRestaurant3); })
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity id must not be null.");
     }
 
     @Test
-    public void updateById_withNullProperties() {
+    public void updateRestaurantById_withNullProperties() {
         testRestaurant3.setName(null);
         testRestaurant3.setVotes(null);
         testRestaurant3.setMeals(null);
         assertThatThrownBy(() -> { restaurantService.updateRestaurantById(1, testRestaurant3); })
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The entity's properties must not be null (except id).");
+                .hasMessageContaining("The entity's properties must not be null (except id and restaurant).");
     }
 
     @Test
-    public void voteById() {
+    public void voteForRestaurantById() {
         Restaurant restaurant = restaurantService.getRestaurantById(1);
         Integer initialNumberOfVotes = restaurant.getVotes();
-        restaurantVotingService.voteById(1);
+        restaurantVotingService.voteForRestaurantById(1);
         restaurant = restaurantService.getRestaurantById(1);
         Integer incrementedNumberOfVotes = restaurant.getVotes();
         assertThat(++initialNumberOfVotes).isEqualTo(incrementedNumberOfVotes);
     }
 
     @Test
-    public void voteById_withNullId() {
-        assertThatThrownBy(() -> restaurantVotingService.voteById(null))
+    public void voteForRestaurantById_withNullId() {
+        assertThatThrownBy(() -> restaurantVotingService.voteForRestaurantById(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity id must not be null.");
     }
 
     @Test
-    public void voteById_withNonExistingId() {
+    public void voteForRestaurantById_withNonExistingId() {
         Integer id = -1;
-        assertThatThrownBy(() -> restaurantVotingService.voteById(id))
+        assertThatThrownBy(() -> restaurantVotingService.voteForRestaurantById(id))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Restaurant with id=" + id + " not found.");
     }
