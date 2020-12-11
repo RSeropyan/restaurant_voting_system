@@ -1,7 +1,6 @@
 package app;
 
 import app.entity.Meal;
-import app.entity.MealCategory;
 import app.entity.Restaurant;
 import app.service.RestaurantService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -23,7 +22,7 @@ public class ManualRunner {
         Restaurant restaurant = new Restaurant(2, "Marcellis", 100);
         List<Meal> meals = new ArrayList<>();
         restaurant.setMeals(meals);
-        restaurantService.updateById(2, restaurant);
+        restaurantService.updateRestaurantById(2, restaurant);
 
     }
 

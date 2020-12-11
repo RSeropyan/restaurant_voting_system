@@ -138,6 +138,8 @@ public class RestaurantService {
 
     // ----------------------------------------------------------------------
 
+    // Create Methods -------------------------------------------------------
+
     // Tested
     // All caches must be evicted before return
     public Restaurant createRestaurant(Restaurant restaurant) {
@@ -164,24 +166,38 @@ public class RestaurantService {
 
     // ----------------------------------------------------------------------
 
+    // Update Methods -------------------------------------------------------
+
     // Tested
     // All caches must be evicted before return
-    public void updateById(Integer id, Restaurant restaurant) {
-
+    public void updateRestaurantById(Integer id, Restaurant restaurant) {
         ValidatorUtil.checkNotNullId(id);
-        Restaurant r = restaurantRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         ValidatorUtil.checkNotNullInstance(restaurant);
         ValidatorUtil.checkNotNullProperties(restaurant);
+        Restaurant r = restaurantRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
 
         r.setName(restaurant.getName());
         r.setVotes(restaurant.getVotes());
         r.getMeals().clear();
         r.getMeals().addAll(restaurant.getMeals());
-        // The invocation of flush() below is mandatory for successful passing of "updateById_withExistingName" test
+        // The invocation of flush() below is mandatory for successful passing of "updateRestaurantById_withExistingName" test
         restaurantRepository.flush();
-
     }
 
+    public void updateMealById(Integer id, Meal meal) {
+        ValidatorUtil.checkNotNullId(id);
+        ValidatorUtil.checkNotNullInstance(meal);
+        ValidatorUtil.checkNotNullProperties(meal);
+        Meal m = mealRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found."));
+        m.setName(meal.getName());
+        m.setCategory(meal.getCategory());
+        m.setPrice(meal.getPrice());
+        // The invocation of flush() below is mandatory for successful passing of "updateMealById_withExistingNameAndRestaurant" test
+        mealRepository.flush();
+    }
+
+    // ----------------------------------------------------------------------
 
 }

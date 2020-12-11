@@ -186,7 +186,7 @@ public class RestaurantServiceTest {
 
     @Test
     public void updateById() {
-        restaurantService.updateById(2, testRestaurant3);
+        restaurantService.updateRestaurantById(2, testRestaurant3);
         Restaurant realRestaurant = restaurantService.getRestaurantById(2);
         testRestaurant3.setId(realRestaurant.getId());
         assertThat(realRestaurant).usingRecursiveComparison().isEqualTo(testRestaurant3);
@@ -195,7 +195,7 @@ public class RestaurantServiceTest {
     @Test
     public void updateById_withNonExistingId() {
         Integer id = -1;
-        assertThatThrownBy(() -> restaurantService.updateById(id, new Restaurant()))
+        assertThatThrownBy(() -> restaurantService.updateRestaurantById(id, new Restaurant()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Restaurant with id=" + id + " not found.");
     }
@@ -203,20 +203,20 @@ public class RestaurantServiceTest {
     @Test
     public void updateById_withExistingName() {
         testRestaurant3.setName(testRestaurant1.getName());
-        assertThatThrownBy( () -> restaurantService.updateById(2, testRestaurant3))
+        assertThatThrownBy( () -> restaurantService.updateRestaurantById(2, testRestaurant3))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
     @Test
     public void updateById_withNullEntity() {
-        assertThatThrownBy(() -> restaurantService.updateById(1, null))
+        assertThatThrownBy(() -> restaurantService.updateRestaurantById(1, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity must not be null.");
     }
 
     @Test
     public void updateById_withNullEntityId() {
-        assertThatThrownBy(() -> { restaurantService.updateById(null, testRestaurant3); })
+        assertThatThrownBy(() -> { restaurantService.updateRestaurantById(null, testRestaurant3); })
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity id must not be null.");
     }
@@ -226,7 +226,7 @@ public class RestaurantServiceTest {
         testRestaurant3.setName(null);
         testRestaurant3.setVotes(null);
         testRestaurant3.setMeals(null);
-        assertThatThrownBy(() -> { restaurantService.updateById(1, testRestaurant3); })
+        assertThatThrownBy(() -> { restaurantService.updateRestaurantById(1, testRestaurant3); })
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity's properties must not be null (except id).");
     }
