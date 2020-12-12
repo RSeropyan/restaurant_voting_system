@@ -69,4 +69,17 @@ public class Restaurant {
                 ", votes=" + votes +
                 '}';
     }
+
+    public Restaurant addMeal(Meal meal) {
+        meals.add(meal);
+        meal.setRestaurant(this);
+        return this;
+    }
+
+    public Restaurant removeMeal(Meal meal) {
+        meals.remove(meal);
+        meal.setRestaurant(null);
+        return this;
+    }
+
 }
