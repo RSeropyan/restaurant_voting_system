@@ -70,16 +70,17 @@ public class Restaurant {
                 '}';
     }
 
-    public Restaurant addMeal(Meal meal) {
+    public void addMeal(Meal meal) {
         meals.add(meal);
         meal.setRestaurant(this);
-        return this;
     }
 
-    public Restaurant removeMeal(Meal meal) {
+    public void removeMeal(Meal meal) {
         meals.remove(meal);
         meal.setRestaurant(null);
-        return this;
+    }
+    public void removeAllMeals() {
+        meals.clear();
     }
 
 }

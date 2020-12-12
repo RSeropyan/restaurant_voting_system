@@ -3,6 +3,7 @@ package app.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Meal {
@@ -80,5 +81,20 @@ public class Meal {
                 ", category=" + category +
                 ", price=" + price +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Meal meal = (Meal) o;
+        return name.equals(meal.name) &&
+                category == meal.category &&
+                price.equals(meal.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, category, price);
     }
 }

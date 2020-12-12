@@ -190,6 +190,74 @@ public class RestaurantServiceTest {
     }
 
     @Test
+    public void deleteAllRestaurants() {
+        restaurantService.deleteAllRestaurants();
+        assertThat(restaurantService.getAllRestaurants(null, null, null, null).size()).isEqualTo(0);
+    }
+
+    @Test
+    public void deleteMealById() {
+        Integer id = 1;
+        int initialNumberOfMeals = restaurantService.getAllMealsByRestaurantId(id).size();
+        restaurantService.deleteMealById(id);
+        assertThatThrownBy(() -> restaurantService.getMealById(id))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Meal with id=" + id + " not found.");
+        assertThat(restaurantService.getAllMealsByRestaurantId(id).size()).isEqualTo(--initialNumberOfMeals);
+    }
+
+    @Test
+    public void deleteMealById_withNonExistingId() {
+        Integer id = -1;
+        assertThatThrownBy(() -> restaurantService.deleteMealById(id))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Meal with id=" + id + " not found.");
+    }
+
+    @Test
+    public void deleteMealById_withNullId() {
+        assertThatThrownBy(() -> restaurantService.deleteMealById(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("The entity id must not be null.");
+    }
+
+    @Test
+    public void deleteAllMeals() {
+        restaurantService.deleteAllMeals();
+        assertThat(restaurantService.getAllMealsByRestaurantId(1).size()).isEqualTo(0);
+        assertThat(restaurantService.getAllMealsByRestaurantId(2).size()).isEqualTo(0);
+        Integer id = 1;
+        assertThatThrownBy(() -> restaurantService.deleteMealById(id))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Meal with id=" + id + " not found.");
+    }
+
+    @Test
+    public void deleteAllMealsByRestaurantId() {
+        Integer id = 1;
+        restaurantService.deleteAllMealsByRestaurantId(id);
+        assertThat(restaurantService.getAllMealsByRestaurantId(id).size()).isEqualTo(0);
+        assertThatThrownBy(() -> restaurantService.getMealById(id))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Meal with id=" + id + " not found.");
+    }
+
+    @Test
+    public void deleteAllMealsByRestaurantId_withNonExistingId() {
+        Integer id = -1;
+        assertThatThrownBy(() -> restaurantService.deleteAllMealsByRestaurantId(id))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Restaurant with id=" + id + " not found.");
+    }
+
+    @Test
+    public void deleteAllMealsByRestaurantId_withNullId() {
+        assertThatThrownBy(() -> restaurantService.deleteAllMealsByRestaurantId(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("The entity id must not be null.");
+    }
+
+    @Test
     public void createRestaurant() {
         Integer realRestaurantId = restaurantService.createRestaurant(testRestaurant3);
         testRestaurant3.setId(3);
