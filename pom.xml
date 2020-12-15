@@ -94,6 +94,13 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.4.22.Final</version>
         </dependency>
+        <!-- p6spy -->
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+
 
         <!-- logging -->
         <!-- slf4j-api -->
