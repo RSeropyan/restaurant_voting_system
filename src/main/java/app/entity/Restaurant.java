@@ -23,10 +23,10 @@ public class Restaurant {
     public Restaurant() {
     }
 
-    public Restaurant(Integer id, String name, Integer votes) {
-        this.id = id;
+    public Restaurant(String name, Integer votes, List<Meal> meals) {
         this.name = name;
         this.votes = votes;
+        this.meals = meals;
     }
 
     public Integer getId() {
