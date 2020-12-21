@@ -21,7 +21,8 @@ public class TestData {
 
     public static void initializeTestData() {
 
-        testRestaurant1 = new Restaurant(1, "Marcellis", 3);
+        testRestaurant1 = new Restaurant("Marcellis", 3, null);
+        testRestaurant1.setId(1);
         meal1 = new Meal("Ceaser Salad", MealCategory.SALAD, 350);
         meal1.setId(1);
         meal1.setRestaurant(testRestaurant1);
@@ -40,7 +41,8 @@ public class TestData {
         List<Meal> meals1 = Arrays.asList(meal1, meal2, meal3, meal4, meal5);
         testRestaurant1.setMeals(meals1);
 
-        testRestaurant2 = new Restaurant(2, "Phalli Khinkali", 9);
+        testRestaurant2 = new Restaurant("Phalli Khinkali", 9, null);
+        testRestaurant2.setId(2);
         Meal meal6 = new Meal("Georgian Salad", MealCategory.SALAD, 290);
         meal6.setId(6);
         meal6.setRestaurant(testRestaurant2);
@@ -60,7 +62,7 @@ public class TestData {
         testRestaurant2.setMeals(meals2);
 
         // restaurant for testing CREATE new restaurant functionality
-        testRestaurant3 = new Restaurant(null, "Burger King", 0);
+        testRestaurant3 = new Restaurant("Burger King", 0, null);
         testRestaurant3.setMeals(new ArrayList<>());
 
     }

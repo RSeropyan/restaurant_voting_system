@@ -5,11 +5,10 @@ import app.dao.RestaurantRepository;
 import app.entity.Meal;
 import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
-import app.service.utils.ValidatorUtil;
 import app.service.utils.RestaurantSorter;
+import app.service.utils.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,13 +16,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
-@CacheConfig(cacheNames = {"restaurants", "meals"})
 public class RestaurantService {
 
     private final Logger logger = LoggerFactory.getLogger(app.service.RestaurantService.class);
@@ -51,19 +48,13 @@ public class RestaurantService {
     }
 
     // Must be @Cacheable
-    public List<Restaurant> getAllRestaurants(
-            @Nullable Integer currentPage,
-            @Nullable Integer pageSize,
-            @Nullable RestaurantSorter sorter,
-            @Nullable Sort.Direction sortDirection) {
-
-        currentPage   = (currentPage == null    ? DEFAULT_CURRENT_PAGE             : currentPage);
-        pageSize      = (pageSize == null       ? DEFAULT_PAGE_SIZE                : pageSize);
-        sortDirection = (sortDirection == null) ? DEFAULT_SORT_DIRECTION           : sortDirection;
-        String sortBy = (sorter == null)        ? DEFAULT_SORTED_BY.getFieldName() : sorter.getFieldName();
-
-        Sort sort = Sort.by(sortDirection, sortBy);
-        Pageable pageable = PageRequest.of(currentPage, pageSize, sort);
+    public List<Restaurant> getAllRestaurants(@Nullable Pageable pageable) {
+        if (pageable == null) {
+            pageable = PageRequest.of(
+                    DEFAULT_CURRENT_PAGE,
+                    DEFAULT_PAGE_SIZE,
+                    Sort.by(DEFAULT_SORT_DIRECTION, DEFAULT_SORTED_BY.getFieldName()));
+        }
         logger.info("Restaurant Service layer: Returning all restaurants.");
         return restaurantRepository.findAll(pageable).getContent();
     }
