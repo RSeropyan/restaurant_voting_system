@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
+import static app.service.utils.PaginationUtil.*;
 import static app.service.testdata.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,11 +28,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @Sql(scripts = "/mysql_script.sql")
 @Transactional
 public class RestaurantServiceTest {
-
-    private static final Integer DEFAULT_CURRENT_PAGE = 0;
-    private static final Integer DEFAULT_PAGE_SIZE = Integer.MAX_VALUE;
-    private static final RestaurantSorter DEFAULT_SORTED_BY = RestaurantSorter.VOTES;
-    private static final Sort.Direction DEFAULT_SORT_DIRECTION = Sort.Direction.DESC;
 
     @Autowired
     private RestaurantService restaurantService;
