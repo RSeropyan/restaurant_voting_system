@@ -90,11 +90,12 @@ public class Meal {
         Meal meal = (Meal) o;
         return name.equals(meal.name) &&
                 category == meal.category &&
-                price.equals(meal.price);
+                restaurant.equals(meal.restaurant);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, category, price);
+        return Objects.hash(name, category, restaurant);
     }
+
 }

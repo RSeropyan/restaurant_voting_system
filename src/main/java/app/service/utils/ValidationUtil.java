@@ -39,7 +39,7 @@ public class ValidationUtil {
                     Object o = field.get(entity);
                     logger.info("Checking entity property {} = {} for NotNull constraint.", field.getName(), o);
                     if (o == null) {
-                        throw new IllegalArgumentException("The entity's properties must not be null (except id and restaurant).");
+                        throw new IllegalArgumentException("The entity's properties must not be null (except id).");
                     }
                 }
             } catch (IllegalAccessException e) {

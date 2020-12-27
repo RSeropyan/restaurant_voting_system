@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Restaurant {
@@ -61,15 +62,6 @@ public class Restaurant {
         this.meals = meals;
     }
 
-    @Override
-    public String toString() {
-        return "Restaurant{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", votes=" + votes +
-                '}';
-    }
-
     public void addMeal(Meal meal) {
         meals.add(meal);
         meal.setRestaurant(this);
@@ -79,8 +71,31 @@ public class Restaurant {
         meals.remove(meal);
         meal.setRestaurant(null);
     }
+
     public void removeAllMeals() {
         meals.clear();
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", votes=" + votes +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Restaurant that = (Restaurant) o;
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
 }

@@ -13,8 +13,8 @@ public class TestData {
     public static Restaurant testRestaurant1;
     public static Restaurant testRestaurant2;
     public static Restaurant testNewRestaurant;
+    public static Meal testNewMeal;
     public static Meal meal1;
-    public static Meal newMeal;
 
     static {
         initializeTestData();
@@ -39,7 +39,10 @@ public class TestData {
         Meal meal5 = new Meal("Latte", MealCategory.DRINK, 350);
         meal5.setId(5);
         meal5.setRestaurant(testRestaurant1);
+        // This returns an immutable list!
         List<Meal> meals1 = Arrays.asList(meal1, meal2, meal3, meal4, meal5);
+        // This returns a mutable list which is required for correct testing
+        meals1 = new ArrayList<>(meals1);
         testRestaurant1.setMeals(meals1);
 
         testRestaurant2 = new Restaurant("Phalli Khinkali", 9, null);
@@ -59,15 +62,17 @@ public class TestData {
         Meal meal10 = new Meal("Tea", MealCategory.DRINK, 250);
         meal10.setId(10);
         meal10.setRestaurant(testRestaurant2);
+        // This returns an immutable list!
         List<Meal> meals2 = Arrays.asList(meal6, meal7, meal8, meal9, meal10);
+        // This returns a mutable list which is required for correct testing
+        meals2 = new ArrayList<>(meals2);
         testRestaurant2.setMeals(meals2);
 
         // restaurant for testing CREATE new restaurant functionality
-        testNewRestaurant = new Restaurant("Burger King", 0, null);
-        testNewRestaurant.setMeals(new ArrayList<>());
+        testNewRestaurant = new Restaurant("Burger King", 0, new ArrayList<>());
 
         // meal for testing CREATE new meal functionality
-        newMeal = new Meal("Margarita pizza", MealCategory.MAIN, 420);
+        testNewMeal = new Meal("Margarita pizza", MealCategory.MAIN, 420);
     }
 
 }

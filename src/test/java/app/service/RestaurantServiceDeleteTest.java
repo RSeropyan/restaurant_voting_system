@@ -17,8 +17,11 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
     @Autowired
     private RestaurantService restaurantService;
 
-    @Autowired
-    private RestaurantVotingService restaurantVotingService;
+    @Test
+    public void deleteAllRestaurants() {
+        restaurantService.deleteAllRestaurants();
+        assertThat(restaurantService.getAllRestaurants(null).size()).isEqualTo(0);
+    }
 
     @Test
     public void deleteRestaurantById() {
@@ -43,12 +46,6 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
         assertThatThrownBy(() -> restaurantService.deleteRestaurantById(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The entity id must not be null.");
-    }
-
-    @Test
-    public void deleteAllRestaurants() {
-        restaurantService.deleteAllRestaurants();
-        assertThat(restaurantService.getAllRestaurants(null).size()).isEqualTo(0);
     }
 
     @Test

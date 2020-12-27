@@ -15,6 +15,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static app.service.utils.PaginationSettings.*;
@@ -69,6 +70,12 @@ public class RestaurantService {
 
     // Delete Methods ------------------------------------------------------------
 
+    public void deleteAllRestaurants() {
+        restaurantRepository.deleteAll();
+        restaurantRepository.flush();
+        logger.info("Restaurant Service layer: All restaurants have been removed.");
+    }
+
     public void deleteRestaurantById(Integer id) {
         ValidationUtil.checkNotNullId(id);
         Restaurant restaurant = restaurantRepository.findById(id)
@@ -78,16 +85,10 @@ public class RestaurantService {
         logger.info("Restaurant Service layer: Restaurant with id = {} has been removed.", id);
     }
 
-    public void deleteAllRestaurants() {
-        restaurantRepository.deleteAll();
-        restaurantRepository.flush();
-        logger.info("Restaurant Service layer: All restaurants have been removed.");
-    }
-
     public void deleteMealById(Integer id) {
         ValidationUtil.checkNotNullId(id);
         Meal meal = mealRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found."));
-        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
+        Restaurant restaurant = meal.getRestaurant();
         restaurant.removeMeal(meal);
         restaurantRepository.flush();
         logger.info("Restaurant Service layer: Meal with id = {} has been removed.", id);
@@ -116,6 +117,10 @@ public class RestaurantService {
         ValidationUtil.checkNotNullInstance(restaurant);
         Integer id = restaurant.getId();
         ValidationUtil.checkNullId(id);
+        List<Meal> meals = restaurant.getMeals();
+        if (meals == null) {
+            restaurant.setMeals(new ArrayList<>());
+        }
         ValidationUtil.checkNotNullProperties(restaurant);
         restaurantRepository.save(restaurant);
         restaurantRepository.flush();
@@ -123,11 +128,10 @@ public class RestaurantService {
         return restaurant.getId();
     }
 
-    // Not Tested
-    // All caches must be evicted before return
     public Integer createMealForRestaurantWithId(Integer id, Meal meal) {
         ValidationUtil.checkNotNullId(id);
         ValidationUtil.checkNotNullInstance(meal);
+        ValidationUtil.checkNullId(meal.getId());
         ValidationUtil.checkNotNullProperties(meal);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.addMeal(meal);

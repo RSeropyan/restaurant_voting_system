@@ -1,5 +1,7 @@
 package app.service;
 
+import app.entity.Meal;
+import app.entity.MealCategory;
 import app.entity.Restaurant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,24 +51,34 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest{
     public void createRestaurant_withNullProperties() {
         testNewRestaurant.setName(null);
         testNewRestaurant.setVotes(null);
-        testNewRestaurant.setMeals(null);
         assertThatThrownBy(() -> restaurantService.createRestaurant(testNewRestaurant))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The entity's properties must not be null (except id and restaurant).");
+                .hasMessageContaining("The entity's properties must not be null (except id).");
     }
 
     @Test
     public void createMealForRestaurantWithId() {
-        Integer realMealId = restaurantService.createMealForRestaurantWithId(1, newMeal);
-        newMeal.setId(realMealId);
-        newMeal.setRestaurant(restaurantService.getRestaurantById(1));
-        assertThat(restaurantService.getMealById(realMealId))
+        Integer realMealId = restaurantService.createMealForRestaurantWithId(1, new Meal("Margarita pizza", MealCategory.MAIN, 420));
+        testNewMeal.setId(realMealId);
+        testRestaurant1.addMeal(testNewMeal);
+        Meal realMeal = restaurantService.getMealById(realMealId);
+        assertThat(realMeal)
                 .usingRecursiveComparison()
-                .isEqualTo(newMeal);
-        Restaurant t = testRestaurant1;
-//        assertThat(restaurantService.getRestaurantById(1))
-//                .usingRecursiveComparison()
-//                .isEqualTo(testRestaurant1);
+                .isEqualTo(testNewMeal);
+        Restaurant realRestaurant = restaurantService.getRestaurantById(1);
+        assertThat(realRestaurant)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurant1);
     }
+
+    @Test
+    public void createMealForRestaurantWithId_withNullRestaurantId() {
+        assertThatThrownBy(() -> restaurantService.createMealForRestaurantWithId(null, new Meal("Margarita pizza", MealCategory.MAIN, 420)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("The entity id must not be null.");
+
+    }
+
+
 
 }
