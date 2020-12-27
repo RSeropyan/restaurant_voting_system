@@ -12,8 +12,9 @@ public class TestData {
 
     public static Restaurant testRestaurant1;
     public static Restaurant testRestaurant2;
-    public static Restaurant testRestaurant3;
+    public static Restaurant testNewRestaurant;
     public static Meal meal1;
+    public static Meal newMeal;
 
     static {
         initializeTestData();
@@ -62,9 +63,11 @@ public class TestData {
         testRestaurant2.setMeals(meals2);
 
         // restaurant for testing CREATE new restaurant functionality
-        testRestaurant3 = new Restaurant("Burger King", 0, null);
-        testRestaurant3.setMeals(new ArrayList<>());
+        testNewRestaurant = new Restaurant("Burger King", 0, null);
+        testNewRestaurant.setMeals(new ArrayList<>());
 
+        // meal for testing CREATE new meal functionality
+        newMeal = new Meal("Margarita pizza", MealCategory.MAIN, 420);
     }
 
 }
