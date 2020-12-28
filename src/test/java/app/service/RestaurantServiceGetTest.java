@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static app.service.testdata.TestData.*;
+import static app.service.utils.ValidationUtil.*;
 import static app.service.utils.PaginationSettings.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -31,8 +32,10 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     public void getAllRestaurants_withNullPageableInstance() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(null);
-        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison().isEqualTo(testRestaurants);
+        assertThat(realRestaurants)
+                .hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurants);
     }
 
     @Test
@@ -43,8 +46,10 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 DEFAULT_PAGE_SIZE,
                 Sort.by(DEFAULT_SORT_DIRECTION, RestaurantSorter.ID.getFieldName()));
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison().isEqualTo(testRestaurants);
+        assertThat(realRestaurants)
+                .hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurants);
     }
 
     @Test
@@ -55,8 +60,10 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 DEFAULT_PAGE_SIZE,
                 Sort.by(Sort.Direction.ASC, RestaurantSorter.VOTES.getFieldName()));
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison().isEqualTo(testRestaurants);
+        assertThat(realRestaurants)
+                .hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurants);
     }
 
     @Test
@@ -67,8 +74,10 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 DEFAULT_PAGE_SIZE,
                 Sort.by(Sort.Direction.DESC, RestaurantSorter.VOTES.getFieldName()));
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison().isEqualTo(testRestaurants);
+        assertThat(realRestaurants)
+                .hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurants);
     }
 
     @Test
@@ -79,8 +88,10 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 DEFAULT_PAGE_SIZE,
                 Sort.by(Sort.Direction.ASC, RestaurantSorter.NAME.getFieldName()));
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison().isEqualTo(testRestaurants);
+        assertThat(realRestaurants)
+                .hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurants);
     }
 
     @Test
@@ -91,8 +102,10 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 DEFAULT_PAGE_SIZE,
                 Sort.by(Sort.Direction.DESC, RestaurantSorter.NAME.getFieldName()));
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison().isEqualTo(testRestaurants);
+        assertThat(realRestaurants)
+                .hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurants);
     }
 
     @Test
@@ -103,8 +116,10 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 1,
                 Sort.by(DEFAULT_SORT_DIRECTION, DEFAULT_SORTED_BY.getFieldName()));
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison().isEqualTo(testRestaurants);
+        assertThat(realRestaurants)
+                .hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurants);
     }
 
     @Test
@@ -115,14 +130,18 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 1,
                 Sort.by(DEFAULT_SORT_DIRECTION, DEFAULT_SORTED_BY.getFieldName()));
         List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants).hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison().isEqualTo(testRestaurants);
+        assertThat(realRestaurants)
+                .hasSameSizeAs(testRestaurants)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurants);
     }
 
     @Test
     public void getRestaurantById() {
         Restaurant realRestaurant1 = restaurantService.getRestaurantById(1);
-        assertThat(realRestaurant1).usingRecursiveComparison().isEqualTo(testRestaurant1);
+        assertThat(realRestaurant1)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurant1);
     }
 
     @Test
@@ -137,13 +156,15 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     public void getRestaurantById_withNullId() {
         assertThatThrownBy(() -> restaurantService.getRestaurantById(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The entity id must not be null.");
+                .hasMessageContaining(MESSAGE_checkNotNullId);
     }
 
     @Test
     public void getMealById() {
         Meal realMeal = restaurantService.getMealById(1);
-        assertThat(realMeal).usingRecursiveComparison().isEqualTo(meal1);
+        assertThat(realMeal)
+                .usingRecursiveComparison()
+                .isEqualTo(meal1);
     }
 
     @Test
@@ -158,13 +179,15 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     public void getMealById_withNullId() {
         assertThatThrownBy(() -> restaurantService.getMealById(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The entity id must not be null.");
+                .hasMessage(MESSAGE_checkNotNullId);
     }
 
     @Test
     public void getAllMealsByRestaurantId() {
         List<Meal> realMeals = restaurantService.getAllMealsByRestaurantId(1);
-        assertThat(realMeals).usingRecursiveComparison().isEqualTo(testRestaurant1.getMeals());
+        assertThat(realMeals)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurant1.getMeals());
     }
 
     @Test
@@ -179,7 +202,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     public void getAllMealsByRestaurantId_withNullId() {
         assertThatThrownBy(() -> restaurantService.getAllMealsByRestaurantId(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("The entity id must not be null.");
+                .hasMessage(MESSAGE_checkNotNullId);
     }
 
 }

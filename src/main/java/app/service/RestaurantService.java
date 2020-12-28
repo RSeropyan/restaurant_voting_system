@@ -103,12 +103,13 @@ public class RestaurantService {
         logger.info("Restaurant Service layer: All meals have been removed.");
     }
 
-    public void deleteAllMealsByRestaurantId(Integer id) {
+    public void deleteAllMealsForRestaurantWithId(Integer id) {
         ValidationUtil.checkNotNullId(id);
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.removeAllMeals();
         restaurantRepository.flush();
+        logger.info("Restaurant Service layer: All meals for restaurant with id = {} have been removed.", id);
     }
 
     // Create Methods -------------------------------------------------------------
@@ -142,8 +143,6 @@ public class RestaurantService {
 
     // Update Methods -------------------------------------------------------
 
-    // Tested
-    // All caches must be evicted before return
     public void updateRestaurantById(Integer id, Restaurant restaurant) {
         ValidationUtil.checkNotNullId(id);
         ValidationUtil.checkNotNullInstance(restaurant);
@@ -160,8 +159,6 @@ public class RestaurantService {
         restaurantRepository.flush();
     }
 
-    // Not Tested
-    // All caches must be evicted before return
     public void updateMealById(Integer id, Meal meal) {
         ValidationUtil.checkNotNullId(id);
         ValidationUtil.checkNotNullInstance(meal);
@@ -175,7 +172,5 @@ public class RestaurantService {
         logger.info("Restaurant Service layer: Updating meal with id = {}.", id);
         mealRepository.flush();
     }
-
-    // ----------------------------------------------------------------------
 
 }

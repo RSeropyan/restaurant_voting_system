@@ -76,21 +76,21 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
 
     @Test
     public void deleteAllMealsByRestaurantId() {
-        restaurantService.deleteAllMealsByRestaurantId(1);
+        restaurantService.deleteAllMealsForRestaurantWithId(1);
         assertThat(restaurantService.getAllMealsByRestaurantId(1)).hasSize(0);
     }
 
     @Test
     public void deleteAllMealsByRestaurantId_withNonExistingId() {
         Integer id = -1;
-        assertThatThrownBy(() -> restaurantService.deleteAllMealsByRestaurantId(id))
+        assertThatThrownBy(() -> restaurantService.deleteAllMealsForRestaurantWithId(id))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Restaurant with id=" + id + " not found.");
     }
 
     @Test
     public void deleteAllMealsByRestaurantId_withNullId() {
-        assertThatThrownBy(() -> restaurantService.deleteAllMealsByRestaurantId(null))
+        assertThatThrownBy(() -> restaurantService.deleteAllMealsForRestaurantWithId(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(MESSAGE_checkNotNullId);
     }
