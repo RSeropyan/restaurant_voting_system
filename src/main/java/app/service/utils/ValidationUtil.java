@@ -9,10 +9,10 @@ public class ValidationUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ValidationUtil.class);
 
-    private static final String MESSAGE_checkNotNullId = "The entity id must not be null.";
-    private static final String MESSAGE_checkNullId = "The entity id must be null.";
-    private static final String MESSAGE_checkNotNullInstance = "The entity must not be null.";
-    private static final String MESSAGE_checkNotNullProperties = "The entity's properties must not be null (except id).";
+    public static final String MESSAGE_checkNotNullId = "The entity id must not be null.";
+    public static final String MESSAGE_checkNullId = "The entity id must be null.";
+    public static final String MESSAGE_checkNotNullInstance = "The entity must not be null.";
+    public static final String MESSAGE_checkNotNullProperties = "The entity's properties must not be null (except id).";
 
     public static void checkNotNullId(Integer id) {
         logger.info("Checking id value = {} for NotNull constraint.", id);
