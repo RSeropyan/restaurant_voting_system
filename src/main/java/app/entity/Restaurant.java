@@ -67,12 +67,18 @@ public class Restaurant {
         meal.setRestaurant(this);
     }
 
+    public void addMeals(List<Meal> meals) {
+        meals.forEach(meal -> meal.setRestaurant(this));
+        this.meals.addAll(meals);
+    }
+
     public void removeMeal(Meal meal) {
         meals.remove(meal);
         meal.setRestaurant(null);
     }
 
     public void removeAllMeals() {
+        meals.forEach(meal -> meal.setRestaurant(null));
         meals.clear();
     }
 

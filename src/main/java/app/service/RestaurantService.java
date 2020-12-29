@@ -149,12 +149,10 @@ public class RestaurantService {
         ValidationUtil.checkNotNullProperties(restaurant);
         Restaurant r = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
-
         r.setName(restaurant.getName());
         r.setVotes(restaurant.getVotes());
-        r.getMeals().clear();
-        r.getMeals().addAll(restaurant.getMeals());
-        // The invocation of flush() below is mandatory for successful passing of "updateRestaurantById_withExistingName" test
+        r.removeAllMeals();
+        r.addMeals(restaurant.getMeals());
         logger.info("Restaurant Service layer: Updating restaurant with id = {}.", id);
         restaurantRepository.flush();
     }
@@ -168,7 +166,6 @@ public class RestaurantService {
         m.setName(meal.getName());
         m.setCategory(meal.getCategory());
         m.setPrice(meal.getPrice());
-        // The invocation of flush() below is mandatory for successful passing of "updateMealById_withExistingNameAndRestaurant" test
         logger.info("Restaurant Service layer: Updating meal with id = {}.", id);
         mealRepository.flush();
     }

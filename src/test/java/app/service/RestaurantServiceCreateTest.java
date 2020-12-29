@@ -19,17 +19,17 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
 
     @Test
     public void createRestaurant() {
-        Integer realRestaurantId = restaurantService.createRestaurant(testNewRestaurant);
-        testNewRestaurant.setId(realRestaurantId);
+        Integer realRestaurantId = restaurantService.createRestaurant(testRestaurant3);
+        testRestaurant3.setId(realRestaurantId);
         assertThat(restaurantService.getRestaurantById(realRestaurantId))
                 .usingRecursiveComparison()
-                .isEqualTo(testNewRestaurant);
+                .isEqualTo(testRestaurant3);
     }
 
     @Test
     public void createRestaurant_withExistingRestaurantName() {
-        testNewRestaurant.setName(testRestaurant1.getName());
-        assertThatThrownBy(() -> restaurantService.createRestaurant(testNewRestaurant))
+        testRestaurant3.setName(testRestaurant1.getName());
+        assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
@@ -42,17 +42,17 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
 
     @Test
     public void createRestaurant_withNotNullRestaurantId() {
-        testNewRestaurant.setId(0);
-        assertThatThrownBy(() -> restaurantService.createRestaurant(testNewRestaurant))
+        testRestaurant3.setId(0);
+        assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(MESSAGE_checkNullId);
     }
 
     @Test
     public void createRestaurant_withNullRestaurantProperties() {
-        testNewRestaurant.setName(null);
-        testNewRestaurant.setVotes(null);
-        assertThatThrownBy(() -> restaurantService.createRestaurant(testNewRestaurant))
+        testRestaurant3.setName(null);
+        testRestaurant3.setVotes(null);
+        assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(MESSAGE_checkNotNullProperties);
     }
@@ -60,12 +60,13 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
     @Test
     public void createMealForRestaurantWithId() {
         Integer realMealId = restaurantService.createMealForRestaurantWithId(1, new Meal("Margarita pizza", MealCategory.MAIN, 420));
-        testNewMeal.setId(realMealId);
-        testRestaurant1.addMeal(testNewMeal);
+        Meal newMeal = new Meal("Margarita pizza", MealCategory.MAIN, 420);
+        newMeal.setId(realMealId);
+        testRestaurant1.addMeal(newMeal);
         Meal realMeal = restaurantService.getMealById(realMealId);
         assertThat(realMeal)
                 .usingRecursiveComparison()
-                .isEqualTo(testNewMeal);
+                .isEqualTo(newMeal);
         Restaurant realRestaurant = restaurantService.getRestaurantById(1);
         assertThat(realRestaurant)
                 .usingRecursiveComparison()
@@ -113,8 +114,9 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
 
     @Test
     public void createMealForRestaurantWithId_withExistingMealNameAndCategory() {
-        meal1.setId(null);
-        assertThatThrownBy(() -> restaurantService.createMealForRestaurantWithId(1, meal1))
+        Meal newMeal = testRestaurant1.getMeals().get(0);
+        newMeal.setId(null);
+        assertThatThrownBy(() -> restaurantService.createMealForRestaurantWithId(1, newMeal))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 

@@ -1,17 +1,19 @@
 package app.service;
 
+import app.entity.Meal;
+import app.entity.MealCategory;
 import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import static app.service.testdata.TestData.testNewRestaurant;
-import static app.service.testdata.TestData.testRestaurant1;
+import static app.service.testdata.TestData.*;
+import static app.service.utils.ValidationUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class RestaurantServiceUpdateTest extends AbstractServiceTest{
+public class RestaurantServiceUpdateAndVoteTest extends AbstractServiceTest{
 
     @Autowired
     private RestaurantService restaurantService;
@@ -21,24 +23,26 @@ public class RestaurantServiceUpdateTest extends AbstractServiceTest{
 
     @Test
     public void updateRestaurantById() {
-        restaurantService.updateRestaurantById(2, testNewRestaurant);
+        restaurantService.updateRestaurantById(2, testRestaurant3);
         Restaurant realRestaurant = restaurantService.getRestaurantById(2);
-        testNewRestaurant.setId(realRestaurant.getId());
-        assertThat(realRestaurant).usingRecursiveComparison().isEqualTo(testNewRestaurant);
+        testRestaurant3.setId(realRestaurant.getId());
+        assertThat(realRestaurant)
+                .usingRecursiveComparison()
+                .isEqualTo(testRestaurant3);
     }
 
     @Test
     public void updateRestaurantById_withNonExistingId() {
         Integer id = -1;
-        assertThatThrownBy(() -> restaurantService.updateRestaurantById(id, testRestaurant1))
+        assertThatThrownBy(() -> restaurantService.updateRestaurantById(id, testRestaurant3))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Restaurant with id=" + id + " not found.");
     }
 
     @Test
     public void updateRestaurantById_withExistingName() {
-        testNewRestaurant.setName(testRestaurant1.getName());
-        assertThatThrownBy( () -> restaurantService.updateRestaurantById(2, testNewRestaurant))
+        testRestaurant3.setName(testRestaurant1.getName());
+        assertThatThrownBy( () -> restaurantService.updateRestaurantById(2, testRestaurant3))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
@@ -46,24 +50,32 @@ public class RestaurantServiceUpdateTest extends AbstractServiceTest{
     public void updateRestaurantById_withNullEntity() {
         assertThatThrownBy(() -> restaurantService.updateRestaurantById(1, null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The entity must not be null.");
+                .hasMessageContaining(MESSAGE_checkNotNullInstance);
     }
 
     @Test
     public void updateRestaurantById_withNullEntityId() {
-        assertThatThrownBy(() -> { restaurantService.updateRestaurantById(null, testNewRestaurant); })
+        assertThatThrownBy(() -> restaurantService.updateRestaurantById(null, testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The entity id must not be null.");
+                .hasMessageContaining(MESSAGE_checkNotNullId);
     }
 
     @Test
     public void updateRestaurantById_withNullProperties() {
-        testNewRestaurant.setName(null);
-        testNewRestaurant.setVotes(null);
-        testNewRestaurant.setMeals(null);
-        assertThatThrownBy(() -> { restaurantService.updateRestaurantById(1, testNewRestaurant); })
+        testRestaurant3.setName(null);
+        testRestaurant3.setVotes(null);
+        testRestaurant3.setMeals(null);
+        assertThatThrownBy(() -> restaurantService.updateRestaurantById(1, testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The entity's properties must not be null (except id and restaurant).");
+                .hasMessageContaining(MESSAGE_checkNotNullProperties);
+    }
+
+    @Test
+    public void updateRestaurantById_withDuplicateMeals() {
+        testRestaurant3.addMeal(new Meal("Ceaser Salad", MealCategory.SALAD, 350));
+        testRestaurant3.addMeal(new Meal("Ceaser Salad", MealCategory.SALAD, 350));
+        assertThatThrownBy(() -> restaurantService.updateRestaurantById(1, testRestaurant3))
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 
     @Test
