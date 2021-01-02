@@ -77,9 +77,13 @@ public class Restaurant {
         meal.setRestaurant(null);
     }
 
-    public void removeAllMeals() {
+    public void removeMeals() {
         meals.forEach(meal -> meal.setRestaurant(null));
         meals.clear();
+    }
+
+    public void addVote() {
+        votes++;
     }
 
     @Override

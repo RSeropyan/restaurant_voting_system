@@ -13,9 +13,10 @@ import org.springframework.data.domain.Sort;
 import java.util.Arrays;
 import java.util.List;
 
-import static app.service.testdata.TestData.*;
-import static app.service.utils.ValidationUtil.*;
+import static app.service.testdata.TestData.testRestaurant1;
+import static app.service.testdata.TestData.testRestaurant2;
 import static app.service.utils.PaginationSettings.*;
+import static app.service.utils.ValidationUtil.MESSAGE_checkNotNullId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -109,7 +110,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getAllRestaurants_withExpectedFirstPage() {
+    public void getAllRestaurants_withFirstPageExpected() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2);
         Pageable pageable = PageRequest.of(
                 DEFAULT_CURRENT_PAGE,
@@ -123,7 +124,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getAllRestaurants_withExpectedSecondPage() {
+    public void getAllRestaurants_withSecondPageExpected() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1);
         Pageable pageable = PageRequest.of(
                 1,
@@ -145,7 +146,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getRestaurantById_withNonExistingId() {
+    public void getRestaurantById_withNonExistingRestaurantId() {
         int id = -1;
         assertThatThrownBy(() -> restaurantService.getRestaurantById(id))
                 .isInstanceOf(EntityNotFoundException.class)
@@ -153,7 +154,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getRestaurantById_withNullId() {
+    public void getRestaurantById_withNullRestaurantId() {
         assertThatThrownBy(() -> restaurantService.getRestaurantById(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(MESSAGE_checkNotNullId);
@@ -168,7 +169,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getMealById_withNonExistingId() {
+    public void getMealById_withNonExistingMealId() {
         Integer id = -1;
         assertThatThrownBy(() -> restaurantService.getMealById(id))
                 .isInstanceOf(EntityNotFoundException.class)
@@ -176,7 +177,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getMealById_withNullId() {
+    public void getMealById_withNullMealId() {
         assertThatThrownBy(() -> restaurantService.getMealById(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(MESSAGE_checkNotNullId);
@@ -191,7 +192,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getAllMealsByRestaurantId_withNonExistingId() {
+    public void getAllMealsByRestaurantId_withNonExistingRestaurantId() {
         Integer id = -1;
         assertThatThrownBy(() -> restaurantService.getAllMealsByRestaurantId(id))
                 .isInstanceOf(EntityNotFoundException.class)
@@ -199,7 +200,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
     }
 
     @Test
-    public void getAllMealsByRestaurantId_withNullId() {
+    public void getAllMealsByRestaurantId_withNullRestaurantId() {
         assertThatThrownBy(() -> restaurantService.getAllMealsByRestaurantId(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(MESSAGE_checkNotNullId);

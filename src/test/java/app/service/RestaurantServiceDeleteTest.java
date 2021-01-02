@@ -29,7 +29,7 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
     }
 
     @Test
-    public void deleteRestaurantById_withNonExistingId() {
+    public void deleteRestaurantById_withNonExistingRestaurantId() {
         Integer id = -1;
         assertThatThrownBy(() -> restaurantService.deleteRestaurantById(id))
                 .isInstanceOf(EntityNotFoundException.class)
@@ -37,7 +37,7 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
     }
 
     @Test
-    public void deleteRestaurantById_withNullId() {
+    public void deleteRestaurantById_withNullRestaurantId() {
         assertThatThrownBy(() -> restaurantService.deleteRestaurantById(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(MESSAGE_checkNotNullId);
@@ -53,7 +53,7 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
     }
 
     @Test
-    public void deleteMealById_withNonExistingId() {
+    public void deleteMealById_withNonExistingMealId() {
         Integer id = -1;
         assertThatThrownBy(() -> restaurantService.deleteMealById(id))
                 .isInstanceOf(EntityNotFoundException.class)
@@ -61,7 +61,7 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
     }
 
     @Test
-    public void deleteMealById_withNullId() {
+    public void deleteMealById_withNullMealId() {
         assertThatThrownBy(() -> restaurantService.deleteMealById(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(MESSAGE_checkNotNullId);
@@ -81,7 +81,7 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
     }
 
     @Test
-    public void deleteAllMealsByRestaurantId_withNonExistingId() {
+    public void deleteAllMealsByRestaurantId_withNonExistingRestaurantId() {
         Integer id = -1;
         assertThatThrownBy(() -> restaurantService.deleteAllMealsForRestaurantWithId(id))
                 .isInstanceOf(EntityNotFoundException.class)
@@ -89,7 +89,7 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
     }
 
     @Test
-    public void deleteAllMealsByRestaurantId_withNullId() {
+    public void deleteAllMealsByRestaurantId_withNullRestaurantId() {
         assertThatThrownBy(() -> restaurantService.deleteAllMealsForRestaurantWithId(null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(MESSAGE_checkNotNullId);

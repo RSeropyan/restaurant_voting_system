@@ -1,8 +1,6 @@
 package app;
 
-import app.entity.Restaurant;
 import app.service.RestaurantService;
-import app.service.RestaurantVotingService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ManualRunner {
@@ -15,9 +13,7 @@ public class ManualRunner {
         ctx.refresh();
 
         RestaurantService restaurantService = (RestaurantService) ctx.getBean("restaurantService");
-        RestaurantVotingService restaurantVotingService = (RestaurantVotingService) ctx.getBean("restaurantVotingService");
-
-        restaurantVotingService.voteForRestaurantById(1);
+        restaurantService.deleteAllMeals();
 
     }
 

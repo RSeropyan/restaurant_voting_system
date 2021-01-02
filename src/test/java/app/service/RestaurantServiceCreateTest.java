@@ -2,15 +2,18 @@ package app.service;
 
 import app.entity.Meal;
 import app.entity.MealCategory;
-import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import static app.service.testdata.TestData.*;
+import java.util.List;
+
+import static app.service.testdata.TestData.testRestaurant1;
+import static app.service.testdata.TestData.testRestaurant3;
 import static app.service.utils.ValidationUtil.*;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class RestaurantServiceCreateTest extends AbstractServiceTest {
 
@@ -60,17 +63,19 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
     @Test
     public void createMealForRestaurantWithId() {
         Integer realMealId = restaurantService.createMealForRestaurantWithId(1, new Meal("Margarita pizza", MealCategory.MAIN, 420));
-        Meal newMeal = new Meal("Margarita pizza", MealCategory.MAIN, 420);
-        newMeal.setId(realMealId);
-        testRestaurant1.addMeal(newMeal);
+        Meal testMeal = new Meal("Margarita pizza", MealCategory.MAIN, 420);
         Meal realMeal = restaurantService.getMealById(realMealId);
+        // Has new meal been correctly placed in Meal Table?
         assertThat(realMeal)
                 .usingRecursiveComparison()
-                .isEqualTo(newMeal);
-        Restaurant realRestaurant = restaurantService.getRestaurantById(1);
-        assertThat(realRestaurant)
-                .usingRecursiveComparison()
-                .isEqualTo(testRestaurant1);
+                .ignoringFields("id", "restaurant")
+                .isEqualTo(testMeal);
+        // Has restaurant id been correctly set for new meal
+        assertThat(realMeal.getRestaurant().getId()).isEqualTo(1);
+        // Has new meal been correctly placed in restaurant meal list?
+        Integer realMealRestaurantId = realMeal.getRestaurant().getId();
+        List<Meal> restaurantRealMeals = restaurantService.getAllMealsByRestaurantId(realMealRestaurantId);
+        assertThat(restaurantRealMeals.contains(realMeal)).isTrue();
     }
 
     @Test
@@ -81,7 +86,7 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
     }
 
     @Test
-    public void createMealForRestaurantWithId_withNonExistingId() {
+    public void createMealForRestaurantWithId_withNonExistingRestaurantId() {
         Integer id = -1;
         assertThatThrownBy(() -> restaurantService.createMealForRestaurantWithId(id, new Meal("Margarita pizza", MealCategory.MAIN, 420)))
                 .isInstanceOf(EntityNotFoundException.class)
