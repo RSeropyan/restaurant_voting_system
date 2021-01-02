@@ -95,7 +95,7 @@ public class Meal {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, category, restaurant);
+        return Objects.hash(name, category, restaurant.getName());
     }
 
 }
