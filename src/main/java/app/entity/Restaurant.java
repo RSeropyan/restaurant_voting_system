@@ -1,6 +1,8 @@
 package app.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,6 +21,7 @@ public class Restaurant {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Fetch(FetchMode.SUBSELECT)
     private List<Meal> meals;
 
     public Restaurant() {

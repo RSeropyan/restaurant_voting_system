@@ -2,6 +2,7 @@ package app.service;
 
 import app.entity.Meal;
 import app.entity.MealCategory;
+import app.entity.Restaurant;
 import app.exceptions.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,7 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
     public void createMealForRestaurantWithId() {
         Integer realMealId = restaurantService.createMealForRestaurantWithId(1, new Meal("Margarita pizza", MealCategory.MAIN, 420));
         Meal testMeal = new Meal("Margarita pizza", MealCategory.MAIN, 420);
+        testMeal.setRestaurant(new Restaurant());
         Meal realMeal = restaurantService.getMealById(realMealId);
         // Has new meal been correctly placed in Meal Table?
         assertThat(realMeal)

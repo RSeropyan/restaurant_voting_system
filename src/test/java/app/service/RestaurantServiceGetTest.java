@@ -165,7 +165,9 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
         Meal realMeal = restaurantService.getMealById(1);
         assertThat(realMeal)
                 .usingRecursiveComparison()
+                .ignoringFields("restaurant")
                 .isEqualTo(testRestaurant1.getMeals().get(0));
+        assertThat(realMeal.getRestaurant().getId()).isEqualTo(1);
     }
 
     @Test

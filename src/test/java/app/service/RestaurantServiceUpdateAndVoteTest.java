@@ -86,6 +86,7 @@ public class RestaurantServiceUpdateAndVoteTest extends AbstractServiceTest {
         restaurantService.updateMealById(1, new Meal("Greek Salad", MealCategory.SALAD, 310));
         Meal realMeal = restaurantService.getMealById(1);
         Meal testMeal = new Meal("Greek Salad", MealCategory.SALAD, 310);
+        testMeal.setRestaurant(new Restaurant());
         // Has meal been correctly updated in Meal Table?
         assertThat(realMeal)
                 .usingRecursiveComparison()

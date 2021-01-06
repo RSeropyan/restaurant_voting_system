@@ -1,7 +1,10 @@
 package app;
 
+import app.entity.Meal;
 import app.service.RestaurantService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.util.List;
 
 public class ManualRunner {
 
@@ -13,8 +16,8 @@ public class ManualRunner {
         ctx.refresh();
 
         RestaurantService restaurantService = (RestaurantService) ctx.getBean("restaurantService");
-        restaurantService.deleteAllMeals();
-
+        List<Meal> meals = restaurantService.getAllMealsByRestaurantId(1);
+        meals.forEach(meal -> System.out.println(meal.toString()));
     }
 
 }

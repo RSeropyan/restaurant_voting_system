@@ -35,6 +35,7 @@ public class RestaurantService {
 
     // Retrieve Methods ----------------------------------------------------------
 
+    // generates 2 select queries (without FetchMode.SUBSELECT, only N+1 queries are generated)
     public List<Restaurant> getAllRestaurants(@Nullable Pageable pageable) {
         if (pageable == null) {
             pageable = PageRequest.of(
@@ -46,6 +47,7 @@ public class RestaurantService {
         return restaurantRepository.findAll(pageable).getContent();
     }
 
+    // generates 2 select queries (without FetchMode.SUBSELECT, only 1 query is generated)
     public Restaurant getRestaurantById(Integer id) {
         ValidationUtil.checkNotNullId(id);
         logger.info("Restaurant Service layer: Returning restaurant with id = {}.", id);
@@ -60,6 +62,7 @@ public class RestaurantService {
                 .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found.")) ;
     }
 
+    // // generates 2 select queries (without FetchMode.SUBSELECT, only 1 query is generated)
     public List<Meal> getAllMealsByRestaurantId(Integer id) {
         ValidationUtil.checkNotNullId(id);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
