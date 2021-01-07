@@ -25,6 +25,7 @@ public class RestaurantVotingService {
         ValidationUtil.checkNotNullId(id);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.addVote();
+        restaurantRepository.flush();
         logger.info("Restaurant Service layer: Restaurant with id = {} has been voted.", id);
     }
 
