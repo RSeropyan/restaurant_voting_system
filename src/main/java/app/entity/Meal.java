@@ -1,6 +1,8 @@
 package app.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -21,6 +23,7 @@ public class Meal {
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "restaurant")
     private Restaurant restaurant;
 

@@ -35,7 +35,9 @@ public class RestaurantService {
 
     // Retrieve Methods ----------------------------------------------------------
 
-    // generates 2 select queries (without FetchMode.SUBSELECT, only N+1 queries are generated)
+    // generates 1 select query (due to lazy loading) if child collections are not requested
+    // generates 1 more select query to fetch all child collections (due to FetchMode.SUBSELECT)
+    // usage of JOIN FETCH (instead of FetchMode.SUBSELECT) doesn't support pagination at database level
     public List<Restaurant> getAllRestaurants(@Nullable Pageable pageable) {
         if (pageable == null) {
             pageable = PageRequest.of(
@@ -47,7 +49,8 @@ public class RestaurantService {
         return restaurantRepository.findAll(pageable).getContent();
     }
 
-    // generates 2 select queries (without FetchMode.SUBSELECT, only 1 query is generated)
+    // generates maximum 2 select queries (see explanation for getAllRestaurants)
+    // without FetchMode.SUBSELECT, only 1 query is generated because FetchMode.JOIN is default for toMany relations
     public Restaurant getRestaurantById(Integer id) {
         ValidationUtil.checkNotNullId(id);
         logger.info("Restaurant Service layer: Returning restaurant with id = {}.", id);
@@ -55,14 +58,17 @@ public class RestaurantService {
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
     }
 
+    // generates maximum 1 select query (due to FetchMode.JOIN)
+    // without FetchMode.JOIN, 2 queries are generated because FetchMode.SELECT is default for toOne relations
     public Meal getMealById(Integer id) {
         ValidationUtil.checkNotNullId(id);
         logger.info("Restaurant Service layer: Returning meal with id = {}", id);
         return mealRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found.")) ;
+                .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found."));
     }
 
-    // // generates 2 select queries (without FetchMode.SUBSELECT, only 1 query is generated)
+    // generates maximum 2 select queries (see explanation for getAllRestaurants)
+    // without FetchMode.SUBSELECT, only 1 query is generated because FetchMode.JOIN is default for toMany relations
     public List<Meal> getAllMealsByRestaurantId(Integer id) {
         ValidationUtil.checkNotNullId(id);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
