@@ -20,7 +20,7 @@ public class Meal {
     private Integer price;
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant")
     private Restaurant restaurant;
 

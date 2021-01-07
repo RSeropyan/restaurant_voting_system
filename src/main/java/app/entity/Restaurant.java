@@ -20,8 +20,8 @@ public class Restaurant {
     private Integer votes;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Meal> meals;
 
     public Restaurant() {
