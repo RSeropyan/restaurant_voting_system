@@ -72,12 +72,7 @@ public class RestaurantService {
 
     // generates maximum 1 select query (see explanation for getRestaurantById method)
     public List<Meal> getAllMealsByRestaurantId(Integer id) {
-        ValidationUtil.checkNotNullId(id);
-        Restaurant restaurant = restaurantRepository.getRestaurantById(id);
-        if (restaurant == null) {
-            throw new EntityNotFoundException("Restaurant with id=" + id + " not found.");
-        }
-        logger.info("Restaurant Service layer: Returning all meals for restaurant with id = {}.", id);
+        Restaurant restaurant = getRestaurantById(id);
         return restaurant.getMeals();
     }
 
