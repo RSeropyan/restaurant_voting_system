@@ -93,7 +93,7 @@ public class Meal {
         Meal meal = (Meal) o;
         return name.equals(meal.name) &&
                 category == meal.category &&
-                restaurant.equals(meal.restaurant);
+                restaurant.getName().equals(meal.restaurant.getName());
     }
 
     @Override
