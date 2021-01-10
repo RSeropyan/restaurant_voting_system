@@ -96,7 +96,7 @@ public class RestaurantServiceUpdateAndVoteTest extends AbstractServiceTest {
         assertThat(realMeal.getId()).isEqualTo(1);
         // Has meal been correctly updated in restaurant meal list?
         Integer realMealRestaurantId = realMeal.getRestaurant().getId();
-        List<Meal> restaurantRealMeals = restaurantService.getAllMealsByRestaurantId(realMealRestaurantId);
+        List<Meal> restaurantRealMeals = restaurantService.getRestaurantById(realMealRestaurantId).getMeals();
         assertThat(restaurantRealMeals.contains(realMeal)).isTrue();
     }
 

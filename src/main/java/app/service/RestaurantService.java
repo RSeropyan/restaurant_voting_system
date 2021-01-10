@@ -70,12 +70,6 @@ public class RestaurantService {
                 .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found."));
     }
 
-    // generates maximum 1 select query (see explanation for getRestaurantById method)
-    public List<Meal> getAllMealsByRestaurantId(Integer id) {
-        Restaurant restaurant = getRestaurantById(id);
-        return restaurant.getMeals();
-    }
-
     // Delete Methods ------------------------------------------------------------
 
     public void deleteAllRestaurants() {

@@ -76,7 +76,7 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
         assertThat(realMeal.getRestaurant().getId()).isEqualTo(1);
         // Has new meal been correctly placed in restaurant meal list?
         Integer realMealRestaurantId = realMeal.getRestaurant().getId();
-        List<Meal> restaurantRealMeals = restaurantService.getAllMealsByRestaurantId(realMealRestaurantId);
+        List<Meal> restaurantRealMeals = restaurantService.getRestaurantById(realMealRestaurantId).getMeals();
         assertThat(restaurantRealMeals.contains(realMeal)).isTrue();
     }
 

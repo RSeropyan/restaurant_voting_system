@@ -185,27 +185,4 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 .hasMessage(MESSAGE_checkNotNullId);
     }
 
-    @Test
-    public void getAllMealsByRestaurantId() {
-        List<Meal> realMeals = restaurantService.getAllMealsByRestaurantId(1);
-        assertThat(realMeals)
-                .usingRecursiveComparison()
-                .isEqualTo(testRestaurant1.getMeals());
-    }
-
-    @Test
-    public void getAllMealsByRestaurantId_withNonExistingRestaurantId() {
-        Integer id = -1;
-        assertThatThrownBy(() -> restaurantService.getAllMealsByRestaurantId(id))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Restaurant with id=" + id + " not found.");
-    }
-
-    @Test
-    public void getAllMealsByRestaurantId_withNullRestaurantId() {
-        assertThatThrownBy(() -> restaurantService.getAllMealsByRestaurantId(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(MESSAGE_checkNotNullId);
-    }
-
 }

@@ -25,10 +25,7 @@ public class ManualRunner {
         DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
         TransactionStatus status = transactionManager.getTransaction(txDefinition);
         try {
-//            Restaurant restaurant = restaurantService.getRestaurantById(2);
-//            System.out.println(restaurant.toString());
-//            restaurant.getMeals().forEach(meal -> System.out.println(meal.toString()));
-            List<Meal> meals = restaurantService.getAllMealsByRestaurantId(2);
+            List<Meal> meals = restaurantService.getRestaurantById(2).getMeals();
             meals.forEach(meal -> System.out.println(meal.toString() + " - " + meal.getRestaurant().getName()));
             transactionManager.commit(status);
         } catch (Exception e) {

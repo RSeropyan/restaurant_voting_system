@@ -70,14 +70,14 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
     @Test
     public void deleteAllMeals() {
         restaurantService.deleteAllMeals();
-        assertThat(restaurantService.getAllMealsByRestaurantId(1)).hasSize(0);
-        assertThat(restaurantService.getAllMealsByRestaurantId(2)).hasSize(0);
+        assertThat(restaurantService.getRestaurantById(1).getMeals()).hasSize(0);
+        assertThat(restaurantService.getRestaurantById(2).getMeals()).hasSize(0);
     }
 
     @Test
     public void deleteAllMealsByRestaurantId() {
         restaurantService.deleteAllMealsForRestaurantWithId(1);
-        assertThat(restaurantService.getAllMealsByRestaurantId(1)).hasSize(0);
+        assertThat(restaurantService.getRestaurantById(1).getMeals()).hasSize(0);
     }
 
     @Test
