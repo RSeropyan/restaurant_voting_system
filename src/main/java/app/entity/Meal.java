@@ -1,6 +1,8 @@
 package app.entity;
 
+import app.entity.views.RestaurantView;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -8,6 +10,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@JsonView(RestaurantView.Detailed.class)
 public class Meal {
 
     @Id

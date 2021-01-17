@@ -1,6 +1,8 @@
 package app.entity;
 
+import app.entity.views.RestaurantView;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -13,12 +15,16 @@ public class Restaurant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(RestaurantView.Brief.class)
     private Integer id;
 
+    @JsonView(RestaurantView.Brief.class)
     private String name;
 
+    @JsonView(RestaurantView.Brief.class)
     private Integer votes;
 
+    @JsonView(RestaurantView.Detailed.class)
     @JsonManagedReference
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)

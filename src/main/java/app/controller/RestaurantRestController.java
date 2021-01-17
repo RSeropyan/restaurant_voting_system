@@ -2,8 +2,10 @@ package app.controller;
 
 import app.entity.Meal;
 import app.entity.Restaurant;
+import app.entity.views.RestaurantView;
 import app.service.RestaurantService;
 import app.service.utils.RestaurantSorter;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,8 +39,8 @@ public class RestaurantRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Restaurant>> getAllRestaurants(
-            @RequestParam(required = false, defaultValue = "short") String view,
+    public ResponseEntity<MappingJacksonValue> getAllRestaurants(
+            @RequestParam(required = false, defaultValue = "brief") String view,
             @RequestParam(required = false, defaultValue = "0") Integer currentPage,
             @RequestParam(required = false, defaultValue = "100") Integer pageSize,
             @RequestParam(required = false, defaultValue = "id") RestaurantSorter sorter,
@@ -46,14 +49,22 @@ public class RestaurantRestController {
         Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by(sortDirection, sorter.getFieldName()));
         List<Restaurant> restaurants = restaurantService.getAllRestaurants(pageable);
 
-        restaurants.forEach(restaurant -> Hibernate.initialize(restaurant.getMeals()));
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=UTF-8");
         headers.add("Cache-Control", "no-store");
 
+        // https://stackoverflow.com/questions/23665107/select-jsonview-in-the-spring-mvc-controller
+        MappingJacksonValue value = new MappingJacksonValue(restaurants);
+        if("detailed".equals(view)) {
+            restaurants.forEach(restaurant -> Hibernate.initialize(restaurant.getMeals()));
+            value.setSerializationView(RestaurantView.Detailed.class);
+        }
+        else {
+            value.setSerializationView(RestaurantView.Brief.class);
+        }
+
         logger.info("Controller layer: Returning all restaurants.");
-        return new ResponseEntity<>(restaurants, headers, HttpStatus.OK);
+        return new ResponseEntity<>(value, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -80,19 +91,6 @@ public class RestaurantRestController {
 
         logger.info("Controller layer: Returning meal with id = {}.", id);
         return new ResponseEntity<>(meal, headers, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}/meals")
-    public ResponseEntity<List<Meal>> getAllMealsByRestaurantId(@PathVariable Integer id) {
-
-        List<Meal> meals = restaurantService.getRestaurantById(id).getMeals();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=UTF-8");
-        headers.add("Cache-Control", "no-store");
-
-        logger.info("Controller layer: Returning all meals for restaurant with id = {}.", id);
-        return new ResponseEntity<>(meals, headers, HttpStatus.OK);
     }
 
 }
