@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -18,7 +19,13 @@ public class GlobalExceptionHandler {
         headers.add("Cache-Control", "no-store");
 
         if (e instanceof EntityNotFoundException) {
-            return handleEntityNotFoundException((EntityNotFoundException) e, headers);
+            return handleEntityNotFoundException(e, headers);
+        }
+        else if (e instanceof IllegalArgumentException) {
+            return handleIllegalArgumentException(e, headers);
+        }
+        else if (e instanceof MethodArgumentTypeMismatchException) {
+            return handleMethodArgumentTypeMismatchException(e, headers);
         }
         else {
             return handleOtherExceptions(e, headers);
@@ -26,8 +33,16 @@ public class GlobalExceptionHandler {
 
     }
 
-    private ResponseEntity<ErrorInfo> handleEntityNotFoundException(EntityNotFoundException e, HttpHeaders headers) {
+    private ResponseEntity<ErrorInfo> handleEntityNotFoundException(Exception e, HttpHeaders headers) {
         return new ResponseEntity<>(new ErrorInfo(e), headers, HttpStatus.NOT_FOUND);
+    }
+
+    private ResponseEntity<ErrorInfo> handleIllegalArgumentException(Exception e, HttpHeaders headers) {
+        return new ResponseEntity<>(new ErrorInfo(e), headers, HttpStatus.BAD_REQUEST);
+    }
+
+    private ResponseEntity<ErrorInfo> handleMethodArgumentTypeMismatchException(Exception e, HttpHeaders headers) {
+        return new ResponseEntity<>(new ErrorInfo(e), headers, HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<ErrorInfo> handleOtherExceptions(Exception e, HttpHeaders headers) {
