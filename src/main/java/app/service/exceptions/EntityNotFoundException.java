@@ -1,4 +1,4 @@
-package app.exceptions;
+package app.service.exceptions;
 
 public class EntityNotFoundException extends RuntimeException {
 

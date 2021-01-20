@@ -1,6 +1,6 @@
 package app.service;
 
-import app.exceptions.EntityNotFoundException;
+import app.service.exceptions.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

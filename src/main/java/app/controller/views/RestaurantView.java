@@ -1,4 +1,4 @@
-package app.entity.views;
+package app.controller.views;
 
 public class RestaurantView {
     public static class Brief {}

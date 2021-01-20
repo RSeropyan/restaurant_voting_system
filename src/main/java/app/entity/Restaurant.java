@@ -1,6 +1,6 @@
 package app.entity;
 
-import app.entity.views.RestaurantView;
+import app.controller.views.RestaurantView;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Fetch;

@@ -4,7 +4,7 @@ import app.dao.MealRepository;
 import app.dao.RestaurantRepository;
 import app.entity.Meal;
 import app.entity.Restaurant;
-import app.exceptions.EntityNotFoundException;
+import app.service.exceptions.EntityNotFoundException;
 import app.service.utils.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static app.service.utils.PaginationSettings.*;
+import static app.service.utils.RestaurantPaginationSettings.*;
 
 @Service
 @Transactional

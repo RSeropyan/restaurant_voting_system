@@ -2,7 +2,7 @@ package app.service;
 
 import app.dao.RestaurantRepository;
 import app.entity.Restaurant;
-import app.exceptions.EntityNotFoundException;
+import app.service.exceptions.EntityNotFoundException;
 import app.service.utils.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

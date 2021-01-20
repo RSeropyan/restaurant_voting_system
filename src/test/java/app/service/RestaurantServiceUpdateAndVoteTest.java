@@ -3,7 +3,7 @@ package app.service;
 import app.entity.Meal;
 import app.entity.MealCategory;
 import app.entity.Restaurant;
-import app.exceptions.EntityNotFoundException;
+import app.service.exceptions.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
