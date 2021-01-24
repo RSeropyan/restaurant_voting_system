@@ -13,8 +13,8 @@ import org.springframework.data.domain.Sort;
 import java.util.Arrays;
 import java.util.List;
 
-import static app.service.testdata.TestData.testRestaurant1;
-import static app.service.testdata.TestData.testRestaurant2;
+import static app.testdata.TestData.testRestaurant1;
+import static app.testdata.TestData.testRestaurant2;
 import static app.service.utils.RestaurantPaginationSettings.*;
 import static app.service.utils.ValidationUtil.MESSAGE_checkNotNullId;
 import static org.assertj.core.api.Assertions.assertThat;

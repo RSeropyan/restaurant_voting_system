@@ -1,4 +1,4 @@
-package app.service.testdata;
+package app.testdata;
 
 import app.entity.Meal;
 import app.entity.MealCategory;

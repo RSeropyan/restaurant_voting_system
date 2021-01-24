@@ -40,7 +40,7 @@ public class RestaurantRestController {
             @RequestParam(required = false, defaultValue = "brief") String view,
             @RequestParam(required = false, defaultValue = "0") Integer currentPage,
             @RequestParam(required = false, defaultValue = "100") Integer pageSize,
-            @RequestParam(required = false, defaultValue = "id") RestaurantSorter sorter,
+            @RequestParam(required = false, defaultValue = "votes") RestaurantSorter sorter,
             @RequestParam(required = false, defaultValue = "desc") Sort.Direction sortDirection) {
 
         Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by(sortDirection, sorter.getFieldName()));

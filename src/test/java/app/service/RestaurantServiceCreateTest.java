@@ -10,8 +10,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 
-import static app.service.testdata.TestData.testRestaurant1;
-import static app.service.testdata.TestData.testRestaurant3;
+import static app.testdata.TestData.testRestaurant1;
+import static app.testdata.TestData.testRestaurant3;
 import static app.service.utils.ValidationUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
