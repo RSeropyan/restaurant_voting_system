@@ -21,9 +21,6 @@ public class GlobalExceptionHandler {
         if (e instanceof EntityNotFoundException) {
             return handleEntityNotFoundException(e, headers);
         }
-        else if (e instanceof IllegalArgumentException) {
-            return handleIllegalArgumentException(e, headers);
-        }
         else if (e instanceof MethodArgumentTypeMismatchException) {
             return handleMethodArgumentTypeMismatchException(e, headers);
         }
@@ -35,10 +32,6 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ErrorInfo> handleEntityNotFoundException(Exception e, HttpHeaders headers) {
         return new ResponseEntity<>(new ErrorInfo(e), headers, HttpStatus.NOT_FOUND);
-    }
-
-    private ResponseEntity<ErrorInfo> handleIllegalArgumentException(Exception e, HttpHeaders headers) {
-        return new ResponseEntity<>(new ErrorInfo(e), headers, HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<ErrorInfo> handleMethodArgumentTypeMismatchException(Exception e, HttpHeaders headers) {
