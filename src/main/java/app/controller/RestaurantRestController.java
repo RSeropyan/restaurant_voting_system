@@ -1,8 +1,8 @@
 package app.controller;
 
+import app.controller.views.RestaurantView;
 import app.entity.Meal;
 import app.entity.Restaurant;
-import app.controller.views.RestaurantView;
 import app.service.RestaurantService;
 import app.service.utils.RestaurantSorter;
 import org.hibernate.Hibernate;
