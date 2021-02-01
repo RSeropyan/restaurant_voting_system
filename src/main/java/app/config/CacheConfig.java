@@ -21,8 +21,6 @@ public class CacheConfig {
                         .maximumSize(100)
                         .removalListener((Object key, Object graph, RemovalCause cause) ->
                                 System.out.printf("Key %s was removed (%s)%n", key, cause))
-                        .weakKeys()
-                        .recordStats()
         );
         return cacheManager;
     }

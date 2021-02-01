@@ -8,6 +8,7 @@ import app.service.exceptions.EntityNotFoundException;
 import app.service.utils.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -38,6 +39,7 @@ public class RestaurantService {
     // generates 1 select query (due to lazy loading) if child collections are not requested
     // generates 1 more select query to fetch all child collections (due to FetchMode.SUBSELECT)
     // usage of JOIN FETCH (instead of default FetchMode.SUBSELECT) doesn't allow paginating at database level
+    @Cacheable(cacheNames = "restaurantsCache")
     public List<Restaurant> getAllRestaurants(@Nullable Pageable pageable) {
         if (pageable == null) {
             pageable = PageRequest.of(
