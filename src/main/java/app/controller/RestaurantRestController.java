@@ -8,6 +8,7 @@ import app.service.utils.RestaurantSorter;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -36,6 +37,7 @@ public class RestaurantRestController {
     }
 
     @GetMapping("/restaurants")
+    @Cacheable(cacheNames = "restaurantsCache")
     public ResponseEntity<MappingJacksonValue> getAllRestaurants(
             @RequestParam(required = false, defaultValue = "brief") String view,
             @RequestParam(required = false, defaultValue = "0") Integer currentPage,
