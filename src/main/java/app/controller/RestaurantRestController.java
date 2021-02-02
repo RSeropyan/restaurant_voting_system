@@ -37,7 +37,11 @@ public class RestaurantRestController {
     }
 
     @GetMapping("/restaurants")
-    @Cacheable(cacheNames = "restaurantsCache")
+    @Cacheable(cacheNames = "restaurantsCache", sync = true)
+    // Ideally @Cacheable have to be declared at service layer.
+    // But! In this particular case declaring this annotation at getAllRestaurants method of service layer
+    // leads to LazyInitializationException when controller's getAllRestaurants method is firstly invoked
+    // with view=brief request param and after that with view=detailed.
     public ResponseEntity<MappingJacksonValue> getAllRestaurants(
             @RequestParam(required = false, defaultValue = "brief") String view,
             @RequestParam(required = false, defaultValue = "0") Integer currentPage,
