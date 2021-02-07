@@ -142,12 +142,9 @@ public class RestaurantRestController {
     @PostMapping("/restaurants")
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant) {
-
         Integer id = restaurantService.createRestaurant(restaurant);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=UTF-8");
-        headers.add("Cache-Control", "no-store");
         headers.add("Location", "/restaurants/" + id);
 
         logger.info("Restaurant Controller layer: Restaurant with id = {} has been created.", id);
@@ -157,24 +154,27 @@ public class RestaurantRestController {
     @PostMapping("/restaurants/{id}")
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public ResponseEntity<String> createMealForRestaurantWithId(@PathVariable Integer id, @RequestBody Meal meal) {
-
         Integer meal_id = restaurantService.createMealForRestaurantWithId(id, meal);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=UTF-8");
-        headers.add("Cache-Control", "no-store");
         headers.add("Location", "/restaurants/meals/" + meal_id);
 
         logger.info("Restaurant Controller layer: Meal with id = {} has been created for restaurant with id = {}.", meal_id, id);
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    public void updateRestaurantById() {
+    @PutMapping("/restaurants/{id}")
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
+    public void updateRestaurantById(@PathVariable Integer id) {
 
     }
 
-    public void updateMealById() {
-
+    @PutMapping("/restaurants/meals/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
+    public void updateMealById(@PathVariable Integer id, @RequestBody Meal meal) {
+        restaurantService.updateMealById(id, meal);
+        logger.info("Restaurant Controller layer: Meal with id = {} has been updated.", id);
     }
 
 }
