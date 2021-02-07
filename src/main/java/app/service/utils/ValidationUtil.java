@@ -40,7 +40,8 @@ public class ValidationUtil {
         for (Field field : fields) {
             try {
                 field.setAccessible(true);
-                if(!field.getName().equals("id") && !field.getName().equals("restaurant")) {
+                if(!field.getName().equals("id") &&
+                   !field.getName().equals("restaurant")) {
                     Object o = field.get(entity);
                     logger.info("Checking entity property {} = {} for NotNull constraint.", field.getName(), o);
                     if (o == null) {

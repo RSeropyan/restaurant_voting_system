@@ -16,6 +16,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static app.service.utils.RestaurantPaginationSettings.*;
@@ -119,13 +120,20 @@ public class RestaurantService {
 
     public Integer createRestaurant(Restaurant restaurant) {
         ValidationUtil.checkNotNullInstance(restaurant);
-        Integer id = restaurant.getId();
-        ValidationUtil.checkNullId(id);
+        ValidationUtil.checkNullId(restaurant.getId());
+        // Creation of restaurant without meals at all is allowed
+        if (restaurant.getMeals() == null) {
+            restaurant.setMeals(new ArrayList<>());
+        }
+        // Creation of restaurant with non-zero votes is not allowed
+        restaurant.setVotes(0);
         ValidationUtil.checkNotNullProperties(restaurant);
+
         restaurantRepository.save(restaurant);
         restaurantRepository.flush();
-        logger.info("Restaurant Service layer: Creating new restaurant.");
-        return restaurant.getId();
+        Integer id = restaurant.getId();
+        logger.info("Restaurant Service layer: Creating new restaurant with id = {}.", id);
+        return id;
     }
 
     public Integer createMealForRestaurantWithId(Integer id, Meal meal) {
