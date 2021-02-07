@@ -154,6 +154,28 @@ public class RestaurantRestController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
+    @PostMapping("/restaurants/{id}")
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
+    public ResponseEntity<String> createMealForRestaurantWithId(@PathVariable Integer id, @RequestBody Meal meal) {
+
+        Integer meal_id = restaurantService.createMealForRestaurantWithId(id, meal);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=UTF-8");
+        headers.add("Cache-Control", "no-store");
+        headers.add("Location", "/restaurants/meals/" + meal_id);
+
+        logger.info("Restaurant Controller layer: Meal with id = {} has been created for restaurant with id = {}.", meal_id, id);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
+
+    public void updateRestaurantById() {
+
+    }
+
+    public void updateMealById() {
+
+    }
 
 }
 
