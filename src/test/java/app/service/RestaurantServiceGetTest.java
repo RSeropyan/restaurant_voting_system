@@ -16,7 +16,7 @@ import java.util.List;
 import static app.testdata.TestData.testRestaurant1;
 import static app.testdata.TestData.testRestaurant2;
 import static app.service.utils.RestaurantPaginationSettings.*;
-import static app.service.utils.ValidationUtil.MESSAGE_checkNotNullId;
+import static app.service.validation.ValidationUtil.MESSAGE_checkNotNullId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

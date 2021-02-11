@@ -12,7 +12,7 @@ import java.util.List;
 
 import static app.testdata.TestData.testRestaurant1;
 import static app.testdata.TestData.testRestaurant3;
-import static app.service.utils.ValidationUtil.*;
+import static app.service.validation.ValidationUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -58,7 +58,7 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
         testRestaurant3.setVotes(null);
         assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullProperties);
+                .hasMessageContaining(MESSAGE_checkNotNullRestaurantProperties);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
         Meal meal = new Meal(null, null, null);
         assertThatThrownBy(() -> restaurantService.createMealForRestaurantWithId(1, meal))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullProperties);
+                .hasMessageContaining(MESSAGE_checkNotNullMealProperties);
     }
 
     @Test

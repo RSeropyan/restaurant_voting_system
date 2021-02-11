@@ -4,6 +4,7 @@ import app.entity.Meal;
 import app.entity.MealCategory;
 import app.entity.Restaurant;
 import app.service.exceptions.EntityNotFoundException;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,7 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import java.util.List;
 
 import static app.testdata.TestData.testRestaurant3;
-import static app.service.utils.ValidationUtil.*;
+import static app.service.validation.ValidationUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -62,7 +63,7 @@ public class RestaurantServiceUpdateAndVoteTest extends AbstractServiceTest {
         testRestaurant3.setMeals(null);
         assertThatThrownBy(() -> restaurantService.updateRestaurantById(1, testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullProperties);
+                .hasMessageContaining(MESSAGE_checkNotNullRestaurantProperties);
     }
 
     @Test
@@ -126,7 +127,7 @@ public class RestaurantServiceUpdateAndVoteTest extends AbstractServiceTest {
     public void updateMealById_withNullMealProperties() {
         assertThatThrownBy(() -> restaurantService.updateMealById(1, new Meal(null, null, null)))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullProperties);
+                .hasMessageContaining(MESSAGE_checkNotNullMealProperties);
     }
 
     @Test

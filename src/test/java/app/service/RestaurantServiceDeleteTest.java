@@ -4,7 +4,7 @@ import app.service.exceptions.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static app.service.utils.ValidationUtil.MESSAGE_checkNotNullId;
+import static app.service.validation.ValidationUtil.MESSAGE_checkNotNullId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
