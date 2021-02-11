@@ -5,10 +5,9 @@ import app.dao.RestaurantRepository;
 import app.entity.Meal;
 import app.entity.Restaurant;
 import app.service.exceptions.EntityNotFoundException;
-import app.service.utils.ValidationUtil;
+import app.service.validation.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -54,7 +53,7 @@ public class RestaurantService {
     // generates maximum 1 select query despite global fetch strategy FetchMode.SUBSELECT (see RestaurantRepository.class)
     // without FetchMode.SUBSELECT SpringData findById() can be directly used because FetchMode.JOIN is default for toMany relations
     public Restaurant getRestaurantById(Integer id) {
-        ValidationUtil.checkNotNullId(id);
+        ValidationUtil.checkNotNullEntityId(id);
         Restaurant restaurant = restaurantRepository.getRestaurantById(id);
         if (restaurant == null) {
             throw new EntityNotFoundException("Restaurant with id=" + id + " not found.");
@@ -66,7 +65,7 @@ public class RestaurantService {
     // generates maximum 1 select query (due to FetchMode.JOIN for Meal entity)
     // without FetchMode.JOIN, 2 queries are generated because FetchMode.SELECT is default for toOne relations
     public Meal getMealById(Integer id) {
-        ValidationUtil.checkNotNullId(id);
+        ValidationUtil.checkNotNullEntityId(id);
         logger.info("Restaurant Service layer: Returning meal with id = {}", id);
         return mealRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found."));
@@ -81,7 +80,7 @@ public class RestaurantService {
     }
 
     public void deleteRestaurantById(Integer id) {
-        ValidationUtil.checkNotNullId(id);
+        ValidationUtil.checkNotNullEntityId(id);
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurantRepository.deleteById(id);
@@ -90,7 +89,7 @@ public class RestaurantService {
     }
 
     public void deleteMealById(Integer id) {
-        ValidationUtil.checkNotNullId(id);
+        ValidationUtil.checkNotNullEntityId(id);
         Meal meal = mealRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found."));
         Restaurant restaurant = meal.getRestaurant();
         restaurant.removeMeal(meal);
@@ -108,7 +107,7 @@ public class RestaurantService {
     }
 
     public void deleteAllMealsForRestaurantWithId(Integer id) {
-        ValidationUtil.checkNotNullId(id);
+        ValidationUtil.checkNotNullEntityId(id);
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.removeMeals();
@@ -119,15 +118,15 @@ public class RestaurantService {
     // Create Methods -------------------------------------------------------------
 
     public Integer createRestaurant(Restaurant restaurant) {
-        ValidationUtil.checkNotNullInstance(restaurant);
-        ValidationUtil.checkNullId(restaurant.getId());
+        ValidationUtil.checkNotNullEntityInstance(restaurant);
+        ValidationUtil.checkNullEntityId(restaurant.getId());
         // Creation of restaurant without meals at all is allowed
         if (restaurant.getMeals() == null) {
             restaurant.setMeals(new ArrayList<>());
         }
         // Creation of restaurant with non-zero votes is not allowed
         restaurant.setVotes(0);
-        ValidationUtil.checkNotNullProperties(restaurant);
+        ValidationUtil.checkNotNullRestaurantEntityProperties(restaurant);
 
         restaurantRepository.save(restaurant);
         restaurantRepository.flush();
@@ -137,10 +136,10 @@ public class RestaurantService {
     }
 
     public Integer createMealForRestaurantWithId(Integer id, Meal meal) {
-        ValidationUtil.checkNotNullId(id);
-        ValidationUtil.checkNotNullInstance(meal);
-        ValidationUtil.checkNullId(meal.getId());
-        ValidationUtil.checkNotNullProperties(meal);
+        ValidationUtil.checkNotNullEntityId(id);
+        ValidationUtil.checkNotNullEntityInstance(meal);
+        ValidationUtil.checkNullEntityId(meal.getId());
+        ValidationUtil.checkNotNullMealEntityProperties(meal);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.addMeal(meal);
         restaurantRepository.flush();
@@ -151,9 +150,9 @@ public class RestaurantService {
     // Update Methods -------------------------------------------------------
 
     public void updateRestaurantById(Integer id, Restaurant restaurant) {
-        ValidationUtil.checkNotNullId(id);
-        ValidationUtil.checkNotNullInstance(restaurant);
-        ValidationUtil.checkNotNullProperties(restaurant);
+        ValidationUtil.checkNotNullEntityId(id);
+        ValidationUtil.checkNotNullEntityInstance(restaurant);
+        ValidationUtil.checkNotNullRestaurantEntityProperties(restaurant);
         Restaurant r = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         r.setName(restaurant.getName());
@@ -165,9 +164,9 @@ public class RestaurantService {
     }
 
     public void updateMealById(Integer id, Meal meal) {
-        ValidationUtil.checkNotNullId(id);
-        ValidationUtil.checkNotNullInstance(meal);
-        ValidationUtil.checkNotNullProperties(meal);
+        ValidationUtil.checkNotNullEntityId(id);
+        ValidationUtil.checkNotNullEntityInstance(meal);
+        ValidationUtil.checkNotNullMealEntityProperties(meal);
         Meal m = mealRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found."));
         m.setName(meal.getName());
