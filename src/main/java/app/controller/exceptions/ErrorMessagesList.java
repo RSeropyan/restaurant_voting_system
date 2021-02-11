@@ -14,6 +14,11 @@ public class ErrorMessagesList {
         this.errorMessages = new ArrayList<>();
     }
 
+    public ErrorMessagesList(Exception e) {
+        this.errorMessages = new ArrayList<>();
+        this.addErrorMessage(e);
+    }
+
     public void addErrorMessage(String message) {
         errorMessages.add(message);
     }
