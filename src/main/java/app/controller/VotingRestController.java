@@ -28,6 +28,15 @@ public class VotingRestController {
     // because it makes usage of cache almost useless!
     public void voteForRestaurantById(@PathVariable Integer id) {
         restaurantVotingService.voteForRestaurantById(id);
-        logger.info("Controller layer: voting for Restaurant with id = {}", id);
+        logger.info("Restaurant Voting Controller: voting for Restaurant with id = {}", id);
     }
+
+    @DeleteMapping("/restaurants")
+    @ResponseStatus(HttpStatus.OK)
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
+    public void clearAllVotes() {
+        restaurantVotingService.clearAllVotes();
+        logger.info("Restaurant Voting Controller: All votes have been cleared.");
+    }
+
 }
