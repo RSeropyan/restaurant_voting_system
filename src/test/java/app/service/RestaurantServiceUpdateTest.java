@@ -4,25 +4,21 @@ import app.entity.Meal;
 import app.entity.MealCategory;
 import app.entity.Restaurant;
 import app.service.exceptions.EntityNotFoundException;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 
-import static app.testdata.TestData.testRestaurant3;
 import static app.service.validation.ValidationUtil.*;
+import static app.testdata.TestData.testRestaurant3;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class RestaurantServiceUpdateAndVoteTest extends AbstractServiceTest {
+public class RestaurantServiceUpdateTest extends AbstractServiceTest {
 
     @Autowired
     private RestaurantService restaurantService;
-
-    @Autowired
-    private RestaurantVotingService restaurantVotingService;
 
     @Test
     public void updateRestaurantById() {
@@ -136,31 +132,6 @@ public class RestaurantServiceUpdateAndVoteTest extends AbstractServiceTest {
         Meal testMeal = new Meal(realMeal.getName(), realMeal.getCategory(), realMeal.getPrice());
         assertThatThrownBy(() -> restaurantService.updateMealById(2, testMeal))
                 .isInstanceOf(DataIntegrityViolationException.class);
-    }
-
-    @Test
-    public void voteForRestaurantById() {
-        Restaurant restaurant = restaurantService.getRestaurantById(1);
-        Integer initialNumberOfVotes = restaurant.getVotes();
-        restaurantVotingService.voteForRestaurantById(1);
-        restaurant = restaurantService.getRestaurantById(1);
-        Integer incrementedNumberOfVotes = restaurant.getVotes();
-        assertThat(++initialNumberOfVotes).isEqualTo(incrementedNumberOfVotes);
-    }
-
-    @Test
-    public void voteForRestaurantById_withNullRestaurantId() {
-        assertThatThrownBy(() -> restaurantVotingService.voteForRestaurantById(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullId);
-    }
-
-    @Test
-    public void voteForRestaurantById_withNonExistingRestaurantId() {
-        Integer id = -1;
-        assertThatThrownBy(() -> restaurantVotingService.voteForRestaurantById(id))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Restaurant with id=" + id + " not found.");
     }
 
 }
