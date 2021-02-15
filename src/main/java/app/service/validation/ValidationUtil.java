@@ -44,6 +44,7 @@ public class ValidationUtil {
             try {
                 field.setAccessible(true);
                 if(!field.getName().equals("id") &&
+                   !field.getName().equals("votes") &&
                    !field.getName().equals("meals")) {
                     Object o = field.get(entity);
                     logger.info("Checking property {} = {} of Restaurant entity for NotNull constraint.", field.getName(), o);
@@ -63,7 +64,7 @@ public class ValidationUtil {
             try {
                 field.setAccessible(true);
                 if(!field.getName().equals("id") &&
-                        !field.getName().equals("restaurant")) {
+                   !field.getName().equals("restaurant")) {
                     Object o = field.get(entity);
                     logger.info("Checking property {} = {} of Meal entity for NotNull constraint.", field.getName(), o);
                     if (o == null) {

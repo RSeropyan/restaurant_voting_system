@@ -1,14 +1,13 @@
 package app.controller.exceptions;
 
 import app.service.exceptions.EntityNotFoundException;
-//import org.springframework.dao.DataIntegrityViolationException;
+import org.hibernate.PersistentObjectException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-//import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,6 +22,12 @@ public class GlobalExceptionHandler {
         if (e instanceof EntityNotFoundException) {
             return handleEntityNotFoundException(e, headers);
         }
+        else if (e instanceof IllegalArgumentException) {
+            return handleIllegalArgumentException(e, headers);
+        }
+        else if (e instanceof DataIntegrityViolationException) {
+            return handleDataIntegrityViolationException(e, headers);
+        }
         else {
             return handleOtherExceptions(e, headers);
         }
@@ -31,6 +36,14 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ErrorMessagesList> handleEntityNotFoundException(Exception e, HttpHeaders headers) {
         return new ResponseEntity<>(new ErrorMessagesList(e), headers, HttpStatus.NOT_FOUND);
+    }
+
+    private ResponseEntity<ErrorMessagesList> handleIllegalArgumentException(Exception e, HttpHeaders headers) {
+        return new ResponseEntity<>(new ErrorMessagesList(e), headers, HttpStatus.BAD_REQUEST);
+    }
+
+    private ResponseEntity<ErrorMessagesList> handleDataIntegrityViolationException(Exception e, HttpHeaders headers) {
+        return new ResponseEntity<>(new ErrorMessagesList("You are probably trying to save a duplicate of existing entity. For each restaurant the name must be unique. For each meal of a particular restaurant the combination of meal name, category and price must be unique."), headers, HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<ErrorMessagesList> handleOtherExceptions(Exception e, HttpHeaders headers) {

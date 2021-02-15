@@ -164,9 +164,11 @@ public class RestaurantRestController {
     }
 
     @PutMapping("/restaurants/{id}")
+    @ResponseStatus(HttpStatus.OK)
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
-    public void updateRestaurantById(@PathVariable Integer id) {
-
+    public void updateRestaurantById(@PathVariable Integer id, @RequestBody Restaurant restaurant) {
+        restaurantService.updateRestaurantById(id, restaurant);
+        logger.info("Restaurant Controller layer: Restaurant with id = {} has been updated.", id);
     }
 
     @PutMapping("/restaurants/meals/{id}")

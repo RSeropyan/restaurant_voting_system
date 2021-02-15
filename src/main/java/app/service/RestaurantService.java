@@ -120,13 +120,21 @@ public class RestaurantService {
     public Integer createRestaurant(Restaurant restaurant) {
         ValidationUtil.checkNotNullEntityInstance(restaurant);
         ValidationUtil.checkNullEntityId(restaurant.getId());
-        // Creation of restaurant without meals at all is allowed
-        if (restaurant.getMeals() == null) {
+        // Creation of restaurant without name is not allowed
+        ValidationUtil.checkNotNullRestaurantEntityProperties(restaurant);
+        // Creation of restaurant with empty list of meals or without meals property at all is allowed
+        if (restaurant.getMeals() == null || restaurant.getMeals().isEmpty()) {
             restaurant.setMeals(new ArrayList<>());
+        }
+        else {
+            restaurant.getMeals().forEach(meal -> {
+                ValidationUtil.checkNotNullEntityInstance(meal);
+                ValidationUtil.checkNullEntityId(meal.getId());
+                ValidationUtil.checkNotNullMealEntityProperties(meal);
+            });
         }
         // Creation of restaurant with non-zero votes is not allowed
         restaurant.setVotes(0);
-        ValidationUtil.checkNotNullRestaurantEntityProperties(restaurant);
 
         restaurantRepository.save(restaurant);
         restaurantRepository.flush();
@@ -156,9 +164,17 @@ public class RestaurantService {
         Restaurant r = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         r.setName(restaurant.getName());
-        r.setVotes(restaurant.getVotes());
-        r.removeMeals();
-        r.addMeals(restaurant.getMeals());
+        // Manual updating of votes is not allowed
+        if (restaurant.getMeals() != null) {
+            restaurant.getMeals().forEach(meal -> {
+                ValidationUtil.checkNotNullEntityInstance(meal);
+                ValidationUtil.checkNullEntityId(meal.getId());
+                ValidationUtil.checkNotNullMealEntityProperties(meal);
+            });
+            r.removeMeals();
+            restaurantRepository.flush();
+            r.addMeals(restaurant.getMeals());
+        }
         logger.info("Restaurant Service layer: Updating restaurant with id = {}.", id);
         restaurantRepository.flush();
     }
