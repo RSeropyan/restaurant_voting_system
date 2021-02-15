@@ -5,19 +5,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/v-service")
-public class VotingRestController {
+public class RestaurantVotingRestController {
 
-    private final Logger logger = LoggerFactory.getLogger(app.controller.VotingRestController.class);
+    private final Logger logger = LoggerFactory.getLogger(app.controller.RestaurantVotingRestController.class);
 
     private final RestaurantVotingService restaurantVotingService;
 
-    public VotingRestController(RestaurantVotingService restaurantVotingService) {
+    public RestaurantVotingRestController(RestaurantVotingService restaurantVotingService) {
         this.restaurantVotingService = restaurantVotingService;
     }
 
