@@ -39,103 +39,103 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 .isEqualTo(testRestaurants);
     }
 
-    @Test
-    public void getAllRestaurants_withSortedById() {
-        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
-        Pageable pageable = PageRequest.of(
-                DEFAULT_CURRENT_PAGE,
-                DEFAULT_PAGE_SIZE,
-                Sort.by(DEFAULT_SORT_DIRECTION, RestaurantSorter.ID.getFieldName()));
-        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants)
-                .hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison()
-                .isEqualTo(testRestaurants);
-    }
+//    @Test
+//    public void getAllRestaurants_withSortedById() {
+//        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
+//        Pageable pageable = PageRequest.of(
+//                DEFAULT_CURRENT_PAGE,
+//                DEFAULT_PAGE_SIZE,
+//                Sort.by(DEFAULT_SORT_DIRECTION, RestaurantSorter.ID.getFieldName()));
+//        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
+//        assertThat(realRestaurants)
+//                .hasSameSizeAs(testRestaurants)
+//                .usingRecursiveComparison()
+//                .isEqualTo(testRestaurants);
+//    }
 
-    @Test
-    public void getAllRestaurants_withSortedByVotesAscending() {
-        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
-        Pageable pageable = PageRequest.of(
-                DEFAULT_CURRENT_PAGE,
-                DEFAULT_PAGE_SIZE,
-                Sort.by(Sort.Direction.ASC, RestaurantSorter.VOTES.getFieldName()));
-        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants)
-                .hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison()
-                .isEqualTo(testRestaurants);
-    }
+//    @Test
+//    public void getAllRestaurants_withSortedByVotesAscending() {
+//        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
+//        Pageable pageable = PageRequest.of(
+//                DEFAULT_CURRENT_PAGE,
+//                DEFAULT_PAGE_SIZE,
+//                Sort.by(Sort.Direction.ASC, RestaurantSorter.VOTES.getFieldName()));
+//        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
+//        assertThat(realRestaurants)
+//                .hasSameSizeAs(testRestaurants)
+//                .usingRecursiveComparison()
+//                .isEqualTo(testRestaurants);
+//    }
 
-    @Test
-    public void getAllRestaurants_withSortedByVotesDescending() {
-        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
-        Pageable pageable = PageRequest.of(
-                DEFAULT_CURRENT_PAGE,
-                DEFAULT_PAGE_SIZE,
-                Sort.by(Sort.Direction.DESC, RestaurantSorter.VOTES.getFieldName()));
-        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants)
-                .hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison()
-                .isEqualTo(testRestaurants);
-    }
+//    @Test
+//    public void getAllRestaurants_withSortedByVotesDescending() {
+//        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
+//        Pageable pageable = PageRequest.of(
+//                DEFAULT_CURRENT_PAGE,
+//                DEFAULT_PAGE_SIZE,
+//                Sort.by(Sort.Direction.DESC, RestaurantSorter.VOTES.getFieldName()));
+//        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
+//        assertThat(realRestaurants)
+//                .hasSameSizeAs(testRestaurants)
+//                .usingRecursiveComparison()
+//                .isEqualTo(testRestaurants);
+//    }
 
-    @Test
-    public void getAllRestaurants_withSortedByNameAscending() {
-        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
-        Pageable pageable = PageRequest.of(
-                DEFAULT_CURRENT_PAGE,
-                DEFAULT_PAGE_SIZE,
-                Sort.by(Sort.Direction.ASC, RestaurantSorter.NAME.getFieldName()));
-        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants)
-                .hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison()
-                .isEqualTo(testRestaurants);
-    }
+//    @Test
+//    public void getAllRestaurants_withSortedByNameAscending() {
+//        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
+//        Pageable pageable = PageRequest.of(
+//                DEFAULT_CURRENT_PAGE,
+//                DEFAULT_PAGE_SIZE,
+//                Sort.by(Sort.Direction.ASC, RestaurantSorter.NAME.getFieldName()));
+//        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
+//        assertThat(realRestaurants)
+//                .hasSameSizeAs(testRestaurants)
+//                .usingRecursiveComparison()
+//                .isEqualTo(testRestaurants);
+//    }
 
-    @Test
-    public void getAllRestaurants_withSortedByNameDescending() {
-        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
-        Pageable pageable = PageRequest.of(
-                DEFAULT_CURRENT_PAGE,
-                DEFAULT_PAGE_SIZE,
-                Sort.by(Sort.Direction.DESC, RestaurantSorter.NAME.getFieldName()));
-        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants)
-                .hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison()
-                .isEqualTo(testRestaurants);
-    }
+//    @Test
+//    public void getAllRestaurants_withSortedByNameDescending() {
+//        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
+//        Pageable pageable = PageRequest.of(
+//                DEFAULT_CURRENT_PAGE,
+//                DEFAULT_PAGE_SIZE,
+//                Sort.by(Sort.Direction.DESC, RestaurantSorter.NAME.getFieldName()));
+//        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
+//        assertThat(realRestaurants)
+//                .hasSameSizeAs(testRestaurants)
+//                .usingRecursiveComparison()
+//                .isEqualTo(testRestaurants);
+//    }
 
-    @Test
-    public void getAllRestaurants_withFirstPageExpected() {
-        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2);
-        Pageable pageable = PageRequest.of(
-                DEFAULT_CURRENT_PAGE,
-                1,
-                Sort.by(DEFAULT_SORT_DIRECTION, DEFAULT_SORTED_BY.getFieldName()));
-        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants)
-                .hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison()
-                .isEqualTo(testRestaurants);
-    }
+//    @Test
+//    public void getAllRestaurants_withFirstPageExpected() {
+//        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2);
+//        Pageable pageable = PageRequest.of(
+//                DEFAULT_CURRENT_PAGE,
+//                1,
+//                Sort.by(DEFAULT_SORT_DIRECTION, DEFAULT_SORTED_BY.getFieldName()));
+//        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
+//        assertThat(realRestaurants)
+//                .hasSameSizeAs(testRestaurants)
+//                .usingRecursiveComparison()
+//                .isEqualTo(testRestaurants);
+//    }
 
-    @Test
-    public void getAllRestaurants_withSecondPageExpected() {
-        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1);
-        Pageable pageable = PageRequest.of(
-                1,
-                1,
-                Sort.by(DEFAULT_SORT_DIRECTION, DEFAULT_SORTED_BY.getFieldName()));
-        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
-        assertThat(realRestaurants)
-                .hasSameSizeAs(testRestaurants)
-                .usingRecursiveComparison()
-                .isEqualTo(testRestaurants);
-    }
+//    @Test
+//    public void getAllRestaurants_withSecondPageExpected() {
+//        List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1);
+//        Pageable pageable = PageRequest.of(
+//                1,
+//                1,
+//                Sort.by(DEFAULT_SORT_DIRECTION, DEFAULT_SORTED_BY.getFieldName()));
+//        List<Restaurant> realRestaurants = restaurantService.getAllRestaurants(pageable);
+//        assertThat(realRestaurants)
+//                .hasSameSizeAs(testRestaurants)
+//                .usingRecursiveComparison()
+//                .isEqualTo(testRestaurants);
+//    }
 
     @Test
     public void getRestaurantById() {

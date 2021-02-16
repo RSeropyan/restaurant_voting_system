@@ -15,21 +15,17 @@ public class ErrorMessagesList {
     }
 
     public ErrorMessagesList(Exception e) {
-        this.errorMessages = new ArrayList<>();
-        this.addErrorMessage(e);
-    }
-
-    public ErrorMessagesList(String message) {
-        this.errorMessages = new ArrayList<>();
-        this.addErrorMessage(message);
-    }
-
-    public void addErrorMessage(String message) {
-        errorMessages.add(message);
-    }
-
-    public void addErrorMessage(Exception e) {
+        errorMessages = new ArrayList<>();
         errorMessages.add(e.getMessage());
+    }
+
+    public ErrorMessagesList(String errorMessage) {
+        errorMessages = new ArrayList<>();
+        errorMessages.add(errorMessage);
+    }
+
+    public ErrorMessagesList(List<String> errorMessages) {
+        this.errorMessages = errorMessages;
     }
 
     public List<String> getErrorMessages() {

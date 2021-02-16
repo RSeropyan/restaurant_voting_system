@@ -1,7 +1,7 @@
 package app.controller.exceptions;
 
 import app.service.exceptions.EntityNotFoundException;
-import org.hibernate.PersistentObjectException;
+import app.service.exceptions.EntityValidationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,6 +28,9 @@ public class GlobalExceptionHandler {
         else if (e instanceof DataIntegrityViolationException) {
             return handleDataIntegrityViolationException(e, headers);
         }
+        else if (e instanceof EntityValidationException) {
+            return handleEntityValidationException((EntityValidationException) e, headers);
+        }
         else {
             return handleOtherExceptions(e, headers);
         }
@@ -44,6 +47,10 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ErrorMessagesList> handleDataIntegrityViolationException(Exception e, HttpHeaders headers) {
         return new ResponseEntity<>(new ErrorMessagesList("You are probably trying to save a duplicate of existing entity. For each restaurant the name must be unique. For each meal of a particular restaurant the combination of meal name, category and price must be unique."), headers, HttpStatus.BAD_REQUEST);
+    }
+
+    private ResponseEntity<ErrorMessagesList> handleEntityValidationException(EntityValidationException e, HttpHeaders headers) {
+        return new ResponseEntity<>(new ErrorMessagesList(e.getErrors()), headers, HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<ErrorMessagesList> handleOtherExceptions(Exception e, HttpHeaders headers) {

@@ -52,14 +52,14 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
                 .hasMessageContaining(MESSAGE_checkNullId);
     }
 
-    @Test
-    public void createRestaurant_withNullRestaurantProperties() {
-        testRestaurant3.setName(null);
-        testRestaurant3.setVotes(null);
-        assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullRestaurantProperties);
-    }
+//    @Test
+//    public void createRestaurant_withNullRestaurantProperties() {
+//        testRestaurant3.setName(null);
+//        testRestaurant3.setVotes(null);
+//        assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
+//                .isInstanceOf(IllegalArgumentException.class)
+//                .hasMessageContaining(MESSAGE_checkNotNullRestaurantProperties);
+//    }
 
     @Test
     public void createMealForRestaurantWithId() {
@@ -111,13 +111,13 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
                 .hasMessageContaining(MESSAGE_checkNullId);
     }
 
-    @Test
-    public void createMealForRestaurantWithId_withNullMealProperties() {
-        Meal meal = new Meal(null, null, null);
-        assertThatThrownBy(() -> restaurantService.createMealForRestaurantWithId(1, meal))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullMealProperties);
-    }
+//    @Test
+//    public void createMealForRestaurantWithId_withNullMealProperties() {
+//        Meal meal = new Meal(null, null, null);
+//        assertThatThrownBy(() -> restaurantService.createMealForRestaurantWithId(1, meal))
+//                .isInstanceOf(IllegalArgumentException.class)
+//                .hasMessageContaining(MESSAGE_checkNotNullMealProperties);
+//    }
 
     @Test
     public void createMealForRestaurantWithId_withExistingMealNameAndCategory() {

@@ -58,7 +58,8 @@ public class RestaurantService {
     // Usage of FetchMode.JOIN (instead of FetchMode.SUBSELECT) doesn't allow paginating at database level
     @Cacheable(cacheNames = "restaurantsCache", sync = true)
     // This is inefficient way of caching (entire collection instead of individual entities of the collection)
-    // https://stackoverflow.com/questions/44529029/spring-cache-with-collection-of-items-entities
+    // because each invocation of RestaurantVotingService.voteForRestaurantById() clear an entire cache
+    // Possible solution: https://stackoverflow.com/questions/44529029/spring-cache-with-collection-of-items-entities
     public List<Restaurant> getAllRestaurants(ListView view, Pageable pageable) {
         if (pageable == null) {
             pageable = PageRequest.of(
@@ -142,12 +143,13 @@ public class RestaurantService {
 
     // Create Methods -------------------------------------------------------------
 
+    // Delete manual invocation of flush()
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public Integer createRestaurant(Restaurant restaurant) {
         ValidationUtil.checkNotNullEntityInstance(restaurant);
         ValidationUtil.checkNullEntityId(restaurant.getId());
         // Creation of restaurant without name is not allowed
-        ValidationUtil.checkNotNullRestaurantEntityProperties(restaurant);
+        ValidationUtil.validateEntityProperties(restaurant);
         // Creation of restaurant with empty list of meals or without meals property at all is allowed
         if (restaurant.getMeals() == null || restaurant.getMeals().isEmpty()) {
             restaurant.setMeals(new ArrayList<>());
@@ -156,7 +158,7 @@ public class RestaurantService {
             restaurant.getMeals().forEach(meal -> {
                 ValidationUtil.checkNotNullEntityInstance(meal);
                 ValidationUtil.checkNullEntityId(meal.getId());
-                ValidationUtil.checkNotNullMealEntityProperties(meal);
+                ValidationUtil.validateEntityProperties(meal);
             });
         }
         // Creation of restaurant with non-zero votes is not allowed
@@ -169,12 +171,13 @@ public class RestaurantService {
         return id;
     }
 
+    // Delete manual invocation of flush()
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public Integer createMealForRestaurantWithId(Integer id, Meal meal) {
         ValidationUtil.checkNotNullEntityId(id);
         ValidationUtil.checkNotNullEntityInstance(meal);
         ValidationUtil.checkNullEntityId(meal.getId());
-        ValidationUtil.checkNotNullMealEntityProperties(meal);
+        ValidationUtil.validateEntityProperties(meal);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.addMeal(meal);
         restaurantRepository.flush();
@@ -184,11 +187,12 @@ public class RestaurantService {
 
     // Update Methods -------------------------------------------------------
 
+    // Delete manual invocation of flush()
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void updateRestaurantById(Integer id, Restaurant restaurant) {
         ValidationUtil.checkNotNullEntityId(id);
         ValidationUtil.checkNotNullEntityInstance(restaurant);
-        ValidationUtil.checkNotNullRestaurantEntityProperties(restaurant);
+        ValidationUtil.validateEntityProperties(restaurant);
         Restaurant r = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         r.setName(restaurant.getName());
@@ -197,7 +201,7 @@ public class RestaurantService {
             restaurant.getMeals().forEach(meal -> {
                 ValidationUtil.checkNotNullEntityInstance(meal);
                 ValidationUtil.checkNullEntityId(meal.getId());
-                ValidationUtil.checkNotNullMealEntityProperties(meal);
+                ValidationUtil.validateEntityProperties(meal);
             });
             r.removeMeals();
             restaurantRepository.flush();
@@ -207,11 +211,12 @@ public class RestaurantService {
         restaurantRepository.flush();
     }
 
+    // Delete manual invocation of flush()
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void updateMealById(Integer id, Meal meal) {
         ValidationUtil.checkNotNullEntityId(id);
         ValidationUtil.checkNotNullEntityInstance(meal);
-        ValidationUtil.checkNotNullMealEntityProperties(meal);
+        ValidationUtil.validateEntityProperties(meal);
         Meal m = mealRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found."));
         m.setName(meal.getName());

@@ -52,15 +52,15 @@ public class RestaurantServiceUpdateTest extends AbstractServiceTest {
                 .hasMessageContaining(MESSAGE_checkNotNullInstance);
     }
 
-    @Test
-    public void updateRestaurantById_withNullRestaurantProperties() {
-        testRestaurant3.setName(null);
-        testRestaurant3.setVotes(null);
-        testRestaurant3.setMeals(null);
-        assertThatThrownBy(() -> restaurantService.updateRestaurantById(1, testRestaurant3))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullRestaurantProperties);
-    }
+//    @Test
+//    public void updateRestaurantById_withNullRestaurantProperties() {
+//        testRestaurant3.setName(null);
+//        testRestaurant3.setVotes(null);
+//        testRestaurant3.setMeals(null);
+//        assertThatThrownBy(() -> restaurantService.updateRestaurantById(1, testRestaurant3))
+//                .isInstanceOf(IllegalArgumentException.class)
+//                .hasMessageContaining(MESSAGE_checkNotNullRestaurantProperties);
+//    }
 
     @Test
     public void updateRestaurantById_withExistingRestaurantName() {
@@ -119,12 +119,12 @@ public class RestaurantServiceUpdateTest extends AbstractServiceTest {
                 .hasMessageContaining(MESSAGE_checkNotNullInstance);
     }
 
-    @Test
-    public void updateMealById_withNullMealProperties() {
-        assertThatThrownBy(() -> restaurantService.updateMealById(1, new Meal(null, null, null)))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullMealProperties);
-    }
+//    @Test
+//    public void updateMealById_withNullMealProperties() {
+//        assertThatThrownBy(() -> restaurantService.updateMealById(1, new Meal(null, null, null)))
+//                .isInstanceOf(IllegalArgumentException.class)
+//                .hasMessageContaining(MESSAGE_checkNotNullMealProperties);
+//    }
 
     @Test
     public void updateMealById_withExistingMealNameAndCategory() {
