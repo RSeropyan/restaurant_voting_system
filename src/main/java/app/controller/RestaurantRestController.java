@@ -5,11 +5,8 @@ import app.entity.Meal;
 import app.entity.Restaurant;
 import app.service.RestaurantService;
 import app.service.utils.RestaurantSorter;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -36,15 +33,6 @@ public class RestaurantRestController {
     }
 
     @GetMapping("/restaurants")
-    @Cacheable(cacheNames = "restaurantsCache", sync = true)
-    // Ideally @Cacheable have to be declared at service layer.
-    // But! in this particular case declaring the annotation at getAllRestaurants method of service layer
-    // leads to LazyInitializationException when controller's getAllRestaurants method is firstly invoked
-    // with view=brief request param and right after that with view=detailed
-    // (because service layer has no idea about 'view' param so in both requests the cache key is the same -> pageable object)
-    // ---
-    // This is the very inefficient way of caching (entire collection instead of individual entities of the collection)
-    // https://stackoverflow.com/questions/44529029/spring-cache-with-collection-of-items-entities
     public ResponseEntity<MappingJacksonValue> getAllRestaurants(
             @RequestParam(required = false, defaultValue = "brief") String view,
             @RequestParam(required = false, defaultValue = "0") Integer currentPage,
@@ -53,19 +41,22 @@ public class RestaurantRestController {
             @RequestParam(required = false, defaultValue = "desc") Sort.Direction sdir) {
 
         Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by(sdir, sort.getFieldName()));
-        List<Restaurant> restaurants = restaurantService.getAllRestaurants(pageable);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=UTF-8");
         headers.add("Cache-Control", "no-store");
 
-        // https://stackoverflow.com/questions/23665107/select-jsonview-in-the-spring-mvc-controller
-        MappingJacksonValue value = new MappingJacksonValue(restaurants);
-        if("detailed".equals(view)) {
-            restaurants.forEach(restaurant -> Hibernate.initialize(restaurant.getMeals()));
+        List<Restaurant> restaurants = null;
+        MappingJacksonValue value = null;
+
+        if("detailed".equalsIgnoreCase(view)) {
+            restaurants = restaurantService.getAllRestaurants(RestaurantService.ListView.DETAILED, pageable);
+            value = new MappingJacksonValue(restaurants);
             value.setSerializationView(RestaurantView.Detailed.class);
         }
         else {
+            restaurants = restaurantService.getAllRestaurants(RestaurantService.ListView.SHORT, pageable);
+            value = new MappingJacksonValue(restaurants);
             value.setSerializationView(RestaurantView.Brief.class);
         }
 
@@ -101,7 +92,6 @@ public class RestaurantRestController {
 
     @DeleteMapping("/restaurants")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void deleteAllRestaurants() {
         restaurantService.deleteAllRestaurants();
         logger.info("Restaurant Controller layer: All restaurants have been removed.");
@@ -109,7 +99,6 @@ public class RestaurantRestController {
 
     @DeleteMapping("/restaurants/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void deleteRestaurantById(@PathVariable Integer id) {
         restaurantService.deleteRestaurantById(id);
         logger.info("Restaurant Controller layer: Restaurant with id = {} has been removed.", id);
@@ -117,7 +106,6 @@ public class RestaurantRestController {
 
     @DeleteMapping("/restaurants/{id}/meals")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void deleteAllMealsForRestaurantWithId(@PathVariable Integer id) {
         restaurantService.deleteAllMealsForRestaurantWithId(id);
         logger.info("Restaurant Controller layer: All meals for restaurant with id = {} have been removed.", id);
@@ -125,7 +113,6 @@ public class RestaurantRestController {
 
     @DeleteMapping("/restaurants/meals")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void deleteAllMeals() {
         restaurantService.deleteAllMeals();
         logger.info("Restaurant Controller layer: All meals for all restaurants have been removed.");
@@ -133,14 +120,12 @@ public class RestaurantRestController {
 
     @DeleteMapping("/restaurants/meals/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void deleteMealById(@PathVariable Integer id) {
         restaurantService.deleteMealById(id);
         logger.info("Restaurant Controller layer: Meal with id = {} has been removed.", id);
     }
 
     @PostMapping("/restaurants")
-    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant) {
         Integer id = restaurantService.createRestaurant(restaurant);
 
@@ -152,7 +137,6 @@ public class RestaurantRestController {
     }
 
     @PostMapping("/restaurants/{id}")
-    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public ResponseEntity<String> createMealForRestaurantWithId(@PathVariable Integer id, @RequestBody Meal meal) {
         Integer meal_id = restaurantService.createMealForRestaurantWithId(id, meal);
 
@@ -165,7 +149,6 @@ public class RestaurantRestController {
 
     @PutMapping("/restaurants/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void updateRestaurantById(@PathVariable Integer id, @RequestBody Restaurant restaurant) {
         restaurantService.updateRestaurantById(id, restaurant);
         logger.info("Restaurant Controller layer: Restaurant with id = {} has been updated.", id);
@@ -173,7 +156,6 @@ public class RestaurantRestController {
 
     @PutMapping("/restaurants/meals/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void updateMealById(@PathVariable Integer id, @RequestBody Meal meal) {
         restaurantService.updateMealById(id, meal);
         logger.info("Restaurant Controller layer: Meal with id = {} has been updated.", id);

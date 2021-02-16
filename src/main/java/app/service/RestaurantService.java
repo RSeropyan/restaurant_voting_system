@@ -6,13 +6,16 @@ import app.entity.Meal;
 import app.entity.Restaurant;
 import app.service.exceptions.EntityNotFoundException;
 import app.service.validation.ValidationUtil;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -21,8 +24,13 @@ import java.util.List;
 import static app.service.utils.RestaurantPaginationSettings.*;
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class RestaurantService {
+
+    public enum ListView {
+        SHORT,
+        DETAILED
+    }
 
     private final Logger logger = LoggerFactory.getLogger(app.service.RestaurantService.class);
 
@@ -36,22 +44,39 @@ public class RestaurantService {
 
     // Retrieve Methods ----------------------------------------------------------
 
-    // generates 1 select query (due to lazy loading) if child collections are not requested
-    // generates 1 more select query to fetch all child collections (due to FetchMode.SUBSELECT)
-    // usage of JOIN FETCH (instead of default FetchMode.SUBSELECT) doesn't allow paginating at database level
-    public List<Restaurant> getAllRestaurants(@Nullable Pageable pageable) {
+    public List<Restaurant> getAllRestaurants(ListView view) {
+        view = (view == null ? ListView.SHORT : view);
+        Pageable pageable = PageRequest.of(
+                DEFAULT_CURRENT_PAGE,
+                DEFAULT_PAGE_SIZE,
+                Sort.by(DEFAULT_SORT_DIRECTION, DEFAULT_SORTED_BY.getFieldName()));
+        return getAllRestaurants(view, pageable);
+    }
+
+    // Generates 1 SELECT query (due to lazy loading)
+    // Generates 1 more SELECT query to fetch all child collections (due to FetchMode.SUBSELECT)
+    // Usage of FetchMode.JOIN (instead of FetchMode.SUBSELECT) doesn't allow paginating at database level
+    @Cacheable(cacheNames = "restaurantsCache", sync = true)
+    // This is inefficient way of caching (entire collection instead of individual entities of the collection)
+    // https://stackoverflow.com/questions/44529029/spring-cache-with-collection-of-items-entities
+    public List<Restaurant> getAllRestaurants(ListView view, Pageable pageable) {
         if (pageable == null) {
             pageable = PageRequest.of(
                     DEFAULT_CURRENT_PAGE,
                     DEFAULT_PAGE_SIZE,
                     Sort.by(DEFAULT_SORT_DIRECTION, DEFAULT_SORTED_BY.getFieldName()));
         }
+        view = (view == null ? ListView.SHORT : view);
+        List<Restaurant> restaurants = restaurantRepository.findAll(pageable).getContent();
+        if (view.name().equalsIgnoreCase("DETAILED")) {
+            restaurants.forEach(restaurant -> Hibernate.initialize(restaurant.getMeals()));
+        }
         logger.info("Restaurant Service layer: Returning all restaurants.");
-        return restaurantRepository.findAll(pageable).getContent();
+        return restaurants;
     }
 
-    // generates maximum 1 select query despite global fetch strategy FetchMode.SUBSELECT (see RestaurantRepository.class)
-    // without FetchMode.SUBSELECT SpringData findById() can be directly used because FetchMode.JOIN is default for toMany relations
+    // Generates 1 SELECT query despite global fetch strategy FetchMode.SUBSELECT (see RestaurantRepository.class)
+    // Without FetchMode.SUBSELECT findById() method of Spring Data can be directly used because FetchMode.JOIN is default strategy for to-Many relations
     public Restaurant getRestaurantById(Integer id) {
         ValidationUtil.checkNotNullEntityId(id);
         Restaurant restaurant = restaurantRepository.getRestaurantById(id);
@@ -62,8 +87,8 @@ public class RestaurantService {
         return restaurant;
     }
 
-    // generates maximum 1 select query (due to FetchMode.JOIN for Meal entity)
-    // without FetchMode.JOIN, 2 queries are generated because FetchMode.SELECT is default for toOne relations
+    // Generates 1 SELECT query (due to FetchMode.JOIN for restaurant property of Meal entity)
+    // Without FetchMode.JOIN, 2 queries are generated because FetchMode.SELECT is default strategy for to-One relations
     public Meal getMealById(Integer id) {
         ValidationUtil.checkNotNullEntityId(id);
         logger.info("Restaurant Service layer: Returning meal with id = {}", id);
@@ -73,50 +98,51 @@ public class RestaurantService {
 
     // Delete Methods ------------------------------------------------------------
 
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void deleteAllRestaurants() {
         restaurantRepository.deleteAll();
-        restaurantRepository.flush();
         logger.info("Restaurant Service layer: All restaurants have been removed.");
     }
 
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void deleteRestaurantById(Integer id) {
         ValidationUtil.checkNotNullEntityId(id);
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurantRepository.deleteById(id);
-        restaurantRepository.flush();
         logger.info("Restaurant Service layer: Restaurant with id = {} has been removed.", id);
     }
 
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void deleteMealById(Integer id) {
         ValidationUtil.checkNotNullEntityId(id);
         Meal meal = mealRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found."));
         Restaurant restaurant = meal.getRestaurant();
         restaurant.removeMeal(meal);
-        restaurantRepository.flush();
         logger.info("Restaurant Service layer: Meal with id = {} has been removed.", id);
     }
 
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void deleteAllMeals() {
         List<Restaurant> restaurants = restaurantRepository.findAll();
         for (Restaurant restaurant : restaurants) {
             restaurant.removeMeals();
         }
-        restaurantRepository.flush();
         logger.info("Restaurant Service layer: All meals have been removed.");
     }
 
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void deleteAllMealsForRestaurantWithId(Integer id) {
         ValidationUtil.checkNotNullEntityId(id);
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.removeMeals();
-        restaurantRepository.flush();
         logger.info("Restaurant Service layer: All meals for restaurant with id = {} have been removed.", id);
     }
 
     // Create Methods -------------------------------------------------------------
 
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public Integer createRestaurant(Restaurant restaurant) {
         ValidationUtil.checkNotNullEntityInstance(restaurant);
         ValidationUtil.checkNullEntityId(restaurant.getId());
@@ -143,6 +169,7 @@ public class RestaurantService {
         return id;
     }
 
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public Integer createMealForRestaurantWithId(Integer id, Meal meal) {
         ValidationUtil.checkNotNullEntityId(id);
         ValidationUtil.checkNotNullEntityInstance(meal);
@@ -157,6 +184,7 @@ public class RestaurantService {
 
     // Update Methods -------------------------------------------------------
 
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void updateRestaurantById(Integer id, Restaurant restaurant) {
         ValidationUtil.checkNotNullEntityId(id);
         ValidationUtil.checkNotNullEntityInstance(restaurant);
@@ -179,6 +207,7 @@ public class RestaurantService {
         restaurantRepository.flush();
     }
 
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void updateMealById(Integer id, Meal meal) {
         ValidationUtil.checkNotNullEntityId(id);
         ValidationUtil.checkNotNullEntityInstance(meal);
