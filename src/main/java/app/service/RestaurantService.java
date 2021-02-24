@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.List;
 import static app.service.utils.RestaurantPaginationSettings.*;
 
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional
 public class RestaurantService {
 
     public enum ListView {
@@ -143,7 +142,6 @@ public class RestaurantService {
 
     // Create Methods -------------------------------------------------------------
 
-    // Delete manual invocation of flush()
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public Integer createRestaurant(Restaurant restaurant) {
         ValidationUtil.checkNotNullEntityInstance(restaurant);
@@ -165,13 +163,11 @@ public class RestaurantService {
         restaurant.setVotes(0);
 
         restaurantRepository.save(restaurant);
-        restaurantRepository.flush();
         Integer id = restaurant.getId();
         logger.info("Restaurant Service layer: Creating new restaurant with id = {}.", id);
         return id;
     }
 
-    // Delete manual invocation of flush()
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public Integer createMealForRestaurantWithId(Integer id, Meal meal) {
         ValidationUtil.checkNotNullEntityId(id);
@@ -180,14 +176,12 @@ public class RestaurantService {
         ValidationUtil.validateEntityProperties(meal);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.addMeal(meal);
-        restaurantRepository.flush();
         logger.info("Restaurant Service layer: Creating new meal for restaurant with id = {}.", id);
         return meal.getId();
     }
 
     // Update Methods -------------------------------------------------------
 
-    // Delete manual invocation of flush()
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void updateRestaurantById(Integer id, Restaurant restaurant) {
         ValidationUtil.checkNotNullEntityId(id);
@@ -204,14 +198,11 @@ public class RestaurantService {
                 ValidationUtil.validateEntityProperties(meal);
             });
             r.removeMeals();
-            restaurantRepository.flush();
             r.addMeals(restaurant.getMeals());
         }
         logger.info("Restaurant Service layer: Updating restaurant with id = {}.", id);
-        restaurantRepository.flush();
     }
 
-    // Delete manual invocation of flush()
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void updateMealById(Integer id, Meal meal) {
         ValidationUtil.checkNotNullEntityId(id);
@@ -223,7 +214,6 @@ public class RestaurantService {
         m.setCategory(meal.getCategory());
         m.setPrice(meal.getPrice());
         logger.info("Restaurant Service layer: Updating meal with id = {}.", id);
-        mealRepository.flush();
     }
 
 }

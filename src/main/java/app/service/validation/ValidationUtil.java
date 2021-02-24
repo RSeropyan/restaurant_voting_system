@@ -48,9 +48,12 @@ public class ValidationUtil {
     }
 
     public static <T> void validateEntityProperties(T entity) {
+        logger.info("Checking entity properties' constraints.");
         Set<ConstraintViolation<T>> violations = validator.validate(entity);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
-        throw new EntityValidationException(errors);
+        if (errors.size() != 0) {
+            throw new EntityValidationException(errors);
+        }
     }
 
 }

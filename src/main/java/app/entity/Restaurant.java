@@ -7,7 +7,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,7 +20,7 @@ public class Restaurant {
     private Integer id;
 
     @JsonView(RestaurantView.Brief.class)
-    @Size(min = 2, message = "Restaurant name must consist of at least 2 letters.")
+    @NotBlank(message = "Restaurant name must not be blank.")
     private String name;
 
     @JsonView(RestaurantView.Brief.class)

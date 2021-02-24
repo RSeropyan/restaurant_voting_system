@@ -31,7 +31,6 @@ public class RestaurantVotingService {
         ValidationUtil.checkNotNullEntityId(id);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.addVote();
-        restaurantRepository.flush();
         logger.info("Restaurant Voting Service: Restaurant with id = {} has been voted.", id);
     }
 
@@ -39,7 +38,6 @@ public class RestaurantVotingService {
     public void clearAllVotes() {
         List<Restaurant> restaurants = restaurantRepository.findAll();
         restaurants.forEach(restaurant -> restaurant.setVotes(0));
-        restaurantRepository.flush();
         logger.info("Restaurant Voting Service: All votes have been cleared.");
     }
 

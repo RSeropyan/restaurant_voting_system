@@ -7,6 +7,9 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Objects;
 
 @Entity
@@ -17,11 +20,15 @@ public class Meal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "Meal name must not be blank.")
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Meal category must be selected.")
     private MealCategory category;
 
+    @NotNull(message = "Meal price must be specified.")
+    @PositiveOrZero(message = "Meal price must be greater or equal to zero.")
     private Integer price;
 
     @JsonBackReference
