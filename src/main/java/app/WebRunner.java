@@ -17,7 +17,11 @@ public class WebRunner implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
         // servletContext.setInitParameter("spring.profiles.default", "dev");
         // now profile is selected in application.properties
-        context.register(app.config.WebConfig.class, app.config.DbConfig.class, app.config.CacheConfig.class);
+        context.register(
+                app.config.WebConfig.class,
+                app.config.DbConfig.class,
+                app.config.CacheConfig.class
+        );
 
         // Create and register the DispatcherServlet
         DispatcherServlet dispatcherServlet = new DispatcherServlet(context);

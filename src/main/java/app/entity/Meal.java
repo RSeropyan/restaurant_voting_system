@@ -23,8 +23,8 @@ public class Meal {
     @NotBlank(message = "Meal name must not be blank.")
     private String name;
 
-    @Enumerated(EnumType.STRING)
     @NotNull(message = "Meal category must be selected.")
+    @Enumerated(EnumType.STRING)
     private MealCategory category;
 
     @NotNull(message = "Meal price must be specified.")

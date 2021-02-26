@@ -5,6 +5,7 @@ import app.dao.RestaurantRepository;
 import app.entity.Meal;
 import app.entity.Restaurant;
 import app.service.exceptions.EntityNotFoundException;
+import app.service.helpers.RestaurantSorter;
 import app.service.validation.ValidationUtil;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -20,21 +21,25 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static app.service.utils.RestaurantPaginationSettings.*;
-
 @Service
 @Transactional
 public class RestaurantService {
+
+    private final Logger logger = LoggerFactory.getLogger(app.service.RestaurantService.class);
+
+    // Pagination Settings
+    public static final Integer DEFAULT_CURRENT_PAGE = 0;
+    public static final Integer DEFAULT_PAGE_SIZE = 100;
+    public static final RestaurantSorter DEFAULT_SORTED_BY = RestaurantSorter.VOTES;
+    public static final Sort.Direction DEFAULT_SORT_DIRECTION = Sort.Direction.DESC;
+
+    private final RestaurantRepository restaurantRepository;
+    private final MealRepository mealRepository;
 
     public enum ListView {
         SHORT,
         DETAILED
     }
-
-    private final Logger logger = LoggerFactory.getLogger(app.service.RestaurantService.class);
-
-    private final RestaurantRepository restaurantRepository;
-    private final MealRepository mealRepository;
 
     public RestaurantService(RestaurantRepository restaurantRepository, MealRepository mealRepository) {
         this.restaurantRepository = restaurantRepository;
@@ -55,10 +60,11 @@ public class RestaurantService {
     // Generates 1 SELECT query (due to lazy loading)
     // Generates 1 more SELECT query to fetch all child collections (due to FetchMode.SUBSELECT)
     // Usage of FetchMode.JOIN (instead of FetchMode.SUBSELECT) doesn't allow paginating at database level
-    @Cacheable(cacheNames = "restaurantsCache", sync = true)
+    // ----
     // This is inefficient way of caching (entire collection instead of individual entities of the collection)
     // because each invocation of RestaurantVotingService.voteForRestaurantById() clear an entire cache
     // Possible solution: https://stackoverflow.com/questions/44529029/spring-cache-with-collection-of-items-entities
+    @Cacheable(cacheNames = "restaurantsCache", sync = true)
     public List<Restaurant> getAllRestaurants(ListView view, Pageable pageable) {
         if (pageable == null) {
             pageable = PageRequest.of(
@@ -71,7 +77,7 @@ public class RestaurantService {
         if (view.name().equalsIgnoreCase("DETAILED")) {
             restaurants.forEach(restaurant -> Hibernate.initialize(restaurant.getMeals()));
         }
-        logger.info("Restaurant Service layer: Returning all restaurants.");
+        logger.info("Restaurant Service layer: All restaurants have been returned.");
         return restaurants;
     }
 
@@ -83,7 +89,7 @@ public class RestaurantService {
         if (restaurant == null) {
             throw new EntityNotFoundException("Restaurant with id=" + id + " not found.");
         }
-        logger.info("Restaurant Service layer: Returning restaurant with id = {}.", id);
+        logger.info("Restaurant Service layer: Restaurant with id = {} has been returned.", id);
         return restaurant;
     }
 
@@ -91,9 +97,10 @@ public class RestaurantService {
     // Without FetchMode.JOIN, 2 queries are generated because FetchMode.SELECT is default strategy for to-One relations
     public Meal getMealById(Integer id) {
         ValidationUtil.checkNotNullEntityId(id);
-        logger.info("Restaurant Service layer: Returning meal with id = {}", id);
-        return mealRepository.findById(id)
+        Meal meal =  mealRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Meal with id=" + id + " not found."));
+        logger.info("Restaurant Service layer: Meal with id = {} has been returned.", id);
+        return meal;
     }
 
     // Delete Methods ------------------------------------------------------------
@@ -107,7 +114,7 @@ public class RestaurantService {
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void deleteRestaurantById(Integer id) {
         ValidationUtil.checkNotNullEntityId(id);
-        Restaurant restaurant = restaurantRepository.findById(id)
+        restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurantRepository.deleteById(id);
         logger.info("Restaurant Service layer: Restaurant with id = {} has been removed.", id);
@@ -164,7 +171,7 @@ public class RestaurantService {
 
         restaurantRepository.save(restaurant);
         Integer id = restaurant.getId();
-        logger.info("Restaurant Service layer: Creating new restaurant with id = {}.", id);
+        logger.info("Restaurant Service layer: New restaurant with id = {} has been created.", id);
         return id;
     }
 
@@ -176,7 +183,7 @@ public class RestaurantService {
         ValidationUtil.validateEntityProperties(meal);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.addMeal(meal);
-        logger.info("Restaurant Service layer: Creating new meal for restaurant with id = {}.", id);
+        logger.info("Restaurant Service layer: New meal for restaurant with id = {} has been created.", id);
         return meal.getId();
     }
 
@@ -200,7 +207,7 @@ public class RestaurantService {
             r.removeMeals();
             r.addMeals(restaurant.getMeals());
         }
-        logger.info("Restaurant Service layer: Updating restaurant with id = {}.", id);
+        logger.info("Restaurant Service layer: Restaurant with id = {} has been updated.", id);
     }
 
     @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
@@ -213,7 +220,7 @@ public class RestaurantService {
         m.setName(meal.getName());
         m.setCategory(meal.getCategory());
         m.setPrice(meal.getPrice());
-        logger.info("Restaurant Service layer: Updating meal with id = {}.", id);
+        logger.info("Restaurant Service layer: Meal with id = {} has been updated.", id);
     }
 
 }

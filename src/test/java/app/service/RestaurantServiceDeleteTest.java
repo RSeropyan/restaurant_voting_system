@@ -4,7 +4,7 @@ import app.service.exceptions.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static app.service.validation.ValidationUtil.MESSAGE_checkNotNullId;
+import static app.service.validation.ValidationUtil.ENTITY_ID_MUST_NOT_BE_NULL_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -40,7 +40,7 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
     public void deleteRestaurantById_withNullRestaurantId() {
         assertThatThrownBy(() -> restaurantService.deleteRestaurantById(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullId);
+                .hasMessageContaining(ENTITY_ID_MUST_NOT_BE_NULL_MESSAGE);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
     public void deleteMealById_withNullMealId() {
         assertThatThrownBy(() -> restaurantService.deleteMealById(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullId);
+                .hasMessageContaining(ENTITY_ID_MUST_NOT_BE_NULL_MESSAGE);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class RestaurantServiceDeleteTest extends AbstractServiceTest{
     public void deleteAllMealsByRestaurantId_withNullRestaurantId() {
         assertThatThrownBy(() -> restaurantService.deleteAllMealsForRestaurantWithId(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullId);
+                .hasMessageContaining(ENTITY_ID_MUST_NOT_BE_NULL_MESSAGE);
     }
 
 }

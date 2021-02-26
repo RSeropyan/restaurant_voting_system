@@ -41,7 +41,7 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
     public void createRestaurant_withNullRestaurantInstance() {
         assertThatThrownBy(() -> restaurantService.createRestaurant(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullInstance);
+                .hasMessageContaining(ENTITY_INSTANCE_MUST_NOT_BE_NULL_MESSAGE);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
         testRestaurant3.setId(0);
         assertThatThrownBy(() -> restaurantService.createRestaurant(testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNullId);
+                .hasMessageContaining(ENTITY_ID_MUST_BE_NULL_MESSAGE);
     }
 
 //    @Test
@@ -84,7 +84,7 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
     public void createMealForRestaurantWithId_withNullRestaurantId() {
         assertThatThrownBy(() -> restaurantService.createMealForRestaurantWithId(null, new Meal("Margarita pizza", MealCategory.MAIN, 420)))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullId);
+                .hasMessageContaining(ENTITY_ID_MUST_NOT_BE_NULL_MESSAGE);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
     public void createMealForRestaurantWithId_withNullMealInstance() {
         assertThatThrownBy(() -> restaurantService.createMealForRestaurantWithId(1, null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullInstance);
+                .hasMessageContaining(ENTITY_INSTANCE_MUST_NOT_BE_NULL_MESSAGE);
     }
 
     @Test
@@ -108,7 +108,7 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
         meal.setId(100);
         assertThatThrownBy(() -> restaurantService.createMealForRestaurantWithId(1, meal))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNullId);
+                .hasMessageContaining(ENTITY_ID_MUST_BE_NULL_MESSAGE);
     }
 
 //    @Test

@@ -1,4 +1,4 @@
-package app.service.utils;
+package app.service.helpers;
 
 public enum RestaurantSorter {
     ID("id"),           // default

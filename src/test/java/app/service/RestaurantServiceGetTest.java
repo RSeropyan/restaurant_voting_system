@@ -1,22 +1,14 @@
 package app.service;
 
-import app.entity.Meal;
 import app.entity.Restaurant;
-import app.service.exceptions.EntityNotFoundException;
-import app.service.utils.RestaurantSorter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static app.testdata.TestData.testRestaurant1;
 import static app.testdata.TestData.testRestaurant2;
-import static app.service.utils.RestaurantPaginationSettings.*;
-import static app.service.validation.ValidationUtil.MESSAGE_checkNotNullId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static app.service.RestaurantService.ListView;

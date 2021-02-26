@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static app.service.validation.ValidationUtil.MESSAGE_checkNotNullId;
+import static app.service.validation.ValidationUtil.ENTITY_ID_MUST_NOT_BE_NULL_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -33,7 +33,7 @@ public class RestaurantVotingServiceTest extends AbstractServiceTest {
     public void voteForRestaurantById_withNullRestaurantId() {
         assertThatThrownBy(() -> restaurantVotingService.voteForRestaurantById(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullId);
+                .hasMessageContaining(ENTITY_ID_MUST_NOT_BE_NULL_MESSAGE);
     }
 
     @Test

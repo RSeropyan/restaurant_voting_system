@@ -19,8 +19,8 @@ public class Restaurant {
     @JsonView(RestaurantView.Brief.class)
     private Integer id;
 
-    @JsonView(RestaurantView.Brief.class)
     @NotBlank(message = "Restaurant name must not be blank.")
+    @JsonView(RestaurantView.Brief.class)
     private String name;
 
     @JsonView(RestaurantView.Brief.class)

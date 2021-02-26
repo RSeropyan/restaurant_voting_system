@@ -1,6 +1,6 @@
 package app.controller.converters;
 
-import app.service.utils.RestaurantSorter;
+import app.service.helpers.RestaurantSorter;
 import org.springframework.core.convert.converter.Converter;
 
 public class StringToRestaurantSorterConverter implements Converter<String, RestaurantSorter> {

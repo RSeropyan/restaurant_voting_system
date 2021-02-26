@@ -1,6 +1,6 @@
 package app.service.validation;
 
-import app.service.exceptions.EntityValidationException;
+import app.service.exceptions.EntityPropertiesValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,28 +22,28 @@ public class ValidationUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ValidationUtil.class);
 
-    public static final String MESSAGE_checkNotNullId = "Entity id must not be null.";
-    public static final String MESSAGE_checkNullId = "Entity id must be null.";
-    public static final String MESSAGE_checkNotNullInstance = "Entity instance must not be null.";
+    public static final String ENTITY_ID_MUST_NOT_BE_NULL_MESSAGE = "Entity id must not be null.";
+    public static final String ENTITY_ID_MUST_BE_NULL_MESSAGE = "Entity id must be null.";
+    public static final String ENTITY_INSTANCE_MUST_NOT_BE_NULL_MESSAGE = "Entity instance must not be null.";
 
     public static void checkNotNullEntityId(Integer id) {
         logger.info("Checking id value = {} for NotNull constraint.", id);
         if (id == null) {
-            throw new IllegalArgumentException(MESSAGE_checkNotNullId);
+            throw new IllegalArgumentException(ENTITY_ID_MUST_NOT_BE_NULL_MESSAGE);
         }
     }
 
     public static void checkNullEntityId(Integer id) {
         logger.info("Checking id value = {} for Null constraint.", id);
         if (id != null) {
-            throw new IllegalArgumentException(MESSAGE_checkNullId);
+            throw new IllegalArgumentException(ENTITY_ID_MUST_BE_NULL_MESSAGE);
         }
     }
 
     public static <T> void checkNotNullEntityInstance(T entity) {
         logger.info("Checking entity instance for NotNull constraint.");
         if (entity == null) {
-            throw new IllegalArgumentException(MESSAGE_checkNotNullInstance);
+            throw new IllegalArgumentException(ENTITY_INSTANCE_MUST_NOT_BE_NULL_MESSAGE);
         }
     }
 
@@ -51,8 +51,8 @@ public class ValidationUtil {
         logger.info("Checking entity properties' constraints.");
         Set<ConstraintViolation<T>> violations = validator.validate(entity);
         List<String> errors = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
-        if (errors.size() != 0) {
-            throw new EntityValidationException(errors);
+        if (!errors.isEmpty()) {
+            throw new EntityPropertiesValidationException(errors);
         }
     }
 

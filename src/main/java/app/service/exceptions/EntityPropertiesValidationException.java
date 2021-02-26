@@ -2,12 +2,12 @@ package app.service.exceptions;
 
 import java.util.List;
 
-public class EntityValidationException extends RuntimeException {
+public class EntityPropertiesValidationException extends RuntimeException {
 
     private final List<String> errors;
 
-    public EntityValidationException(List<String> errors) {
-        super("Entity validation process has failed.");
+    public EntityPropertiesValidationException(List<String> errors) {
+        super("Failed to validate entity properties.");
         this.errors = errors;
     }
 

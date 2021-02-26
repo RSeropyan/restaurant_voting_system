@@ -42,14 +42,14 @@ public class RestaurantServiceUpdateTest extends AbstractServiceTest {
     public void updateRestaurantById_withNullRestaurantId() {
         assertThatThrownBy(() -> restaurantService.updateRestaurantById(null, testRestaurant3))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullId);
+                .hasMessageContaining(ENTITY_ID_MUST_NOT_BE_NULL_MESSAGE);
     }
 
     @Test
     public void updateRestaurantById_withNullRestaurantInstance() {
         assertThatThrownBy(() -> restaurantService.updateRestaurantById(1, null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullInstance);
+                .hasMessageContaining(ENTITY_INSTANCE_MUST_NOT_BE_NULL_MESSAGE);
     }
 
 //    @Test
@@ -109,14 +109,14 @@ public class RestaurantServiceUpdateTest extends AbstractServiceTest {
     public void updateMealById_withNullMealId() {
         assertThatThrownBy(() -> restaurantService.updateMealById(null, new Meal("Greek Salad", MealCategory.SALAD, 310)))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullId);
+                .hasMessageContaining(ENTITY_ID_MUST_NOT_BE_NULL_MESSAGE);
     }
 
     @Test
     public void updateMealById_withNullMealInstance() {
         assertThatThrownBy(() -> restaurantService.updateMealById(1, null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MESSAGE_checkNotNullInstance);
+                .hasMessageContaining(ENTITY_INSTANCE_MUST_NOT_BE_NULL_MESSAGE);
     }
 
 //    @Test

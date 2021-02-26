@@ -25,8 +25,8 @@ public class RestaurantVotingService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     // CacheEvict here is the weakest part of the app in terms of performance because it makes usage of cache almost useless!
+    @CacheEvict(cacheNames = "restaurantsCache", allEntries = true)
     public void voteForRestaurantById(Integer id) {
         ValidationUtil.checkNotNullEntityId(id);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
