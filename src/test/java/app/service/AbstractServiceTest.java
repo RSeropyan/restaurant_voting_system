@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static app.testdata.TestData.initializeTestData;
 
 @SpringJUnitConfig(app.config.DbConfig.class)
-@Sql(scripts = "/mysql_db_init_script.sql")
+@Sql(scripts = "/mysql_test_data_script.sql")
 @Transactional
 public abstract class AbstractServiceTest {
 

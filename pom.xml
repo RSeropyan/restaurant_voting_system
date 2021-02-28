@@ -149,6 +149,14 @@
             <version>1.7.28</version>
         </dependency>
 
+        <!-- This dependency is required for service layer tests to work correctly -->
+        <!-- https://stackoverflow.com/questions/42718869/hibernate-validation-unable-to-initialize-javax-el-expressionfactory-error -->
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.1-b08</version>
+        </dependency>
+
     </dependencies>
 
     <build>

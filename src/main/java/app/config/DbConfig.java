@@ -47,7 +47,7 @@ public class DbConfig {
     @Bean
     public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
         ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
-        resourceDatabasePopulator.addScript(new ClassPathResource("/mysql_db_init_script.sql"));
+        resourceDatabasePopulator.addScript(new ClassPathResource("/mysql_demo_data_script.sql"));
         DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
         dataSourceInitializer.setDataSource(dataSource);
         dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
