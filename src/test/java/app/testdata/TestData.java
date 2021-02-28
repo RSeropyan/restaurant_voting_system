@@ -19,6 +19,7 @@ public class TestData {
     }
 
     public static void initializeTestData() {
+
         testRestaurant1 = new Restaurant("Marcellis", 3, null);
         testRestaurant1.setId(1);
         Meal meal1 = new Meal("Ceaser Salad", MealCategory.SALAD, 350);
