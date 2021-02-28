@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +22,7 @@ import static app.testdata.TestData.testRestaurant2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-
+@Transactional
 public class RestaurantServiceGetTest extends AbstractServiceTest{
 
     @Autowired
@@ -57,6 +58,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 .isEqualTo(testRestaurants);
     }
 
+    @Test
     public void getAllRestaurants_withNullListView_sortedById_Ascending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
         Pageable pageable = PageRequest.of(
@@ -69,6 +71,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 .isEqualTo(testRestaurants);
     }
 
+    @Test
     public void getAllRestaurants_withNullListView_sortedById_Descending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
         Pageable pageable = PageRequest.of(
@@ -81,6 +84,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 .isEqualTo(testRestaurants);
     }
 
+    @Test
     public void getAllRestaurants_withNullListView_sortedByName_Ascending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
         Pageable pageable = PageRequest.of(
@@ -93,6 +97,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 .isEqualTo(testRestaurants);
     }
 
+    @Test
     public void getAllRestaurants_withNullListView_sortedByName_Descending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
         Pageable pageable = PageRequest.of(
@@ -105,6 +110,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 .isEqualTo(testRestaurants);
     }
 
+    @Test
     public void getAllRestaurants_withNullListView_sortedByVotes_Ascending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant1, testRestaurant2);
         Pageable pageable = PageRequest.of(
@@ -117,6 +123,7 @@ public class RestaurantServiceGetTest extends AbstractServiceTest{
                 .isEqualTo(testRestaurants);
     }
 
+    @Test
     public void getAllRestaurants_withNullListView_sortedByVotes_Descending() {
         List<Restaurant> testRestaurants = Arrays.asList(testRestaurant2, testRestaurant1);
         Pageable pageable = PageRequest.of(
