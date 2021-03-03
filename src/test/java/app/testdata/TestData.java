@@ -13,6 +13,9 @@ public class TestData {
     public static Restaurant testRestaurant1;
     public static Restaurant testRestaurant2;
     public static Restaurant testRestaurant3;
+    public static Restaurant testRestaurant4;
+    public static Restaurant testRestaurant5;
+    public static Restaurant testRestaurant6;
 
     static {
         initializeTestData();
@@ -67,6 +70,9 @@ public class TestData {
         testRestaurant2.setMeals(meals2);
 
         testRestaurant3 = new Restaurant("Burger King", 0, new ArrayList<>());
+        testRestaurant4 = new Restaurant("Burger King", 0, null);
+        testRestaurant5 = new Restaurant("Burger King", 10, new ArrayList<>());
+        testRestaurant6 = new Restaurant("Burger King", null, new ArrayList<>());
     }
 
 }

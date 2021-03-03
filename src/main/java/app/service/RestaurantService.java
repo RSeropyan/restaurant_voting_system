@@ -18,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -183,6 +185,7 @@ public class RestaurantService {
         ValidationUtil.validateEntityProperties(meal);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.addMeal(meal);
+        restaurantRepository.flush();
         logger.info("Restaurant Service layer: New meal for restaurant with id = {} has been created.", id);
         return meal.getId();
     }
