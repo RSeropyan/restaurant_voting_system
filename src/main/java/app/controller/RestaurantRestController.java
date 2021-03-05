@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.controller.exceptions.EntityValidationException;
 import app.controller.views.RestaurantView;
 import app.entity.Meal;
 import app.entity.Restaurant;
@@ -7,6 +8,7 @@ import app.service.RestaurantService;
 import app.service.helpers.RestaurantSorter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,9 +18,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Transactional
@@ -137,7 +142,16 @@ public class RestaurantRestController {
     }
 
     @PostMapping("/restaurants/{id}")
-    public ResponseEntity<String> createMealForRestaurantWithId(@PathVariable Integer id, @RequestBody Meal meal) {
+    public ResponseEntity<String> createMealForRestaurantWithId(@PathVariable Integer id, @RequestBody @Valid Meal meal, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            logger.info("Restaurant Controller layer: Failed to validate meal entity while creating it for restaurant with id = {}.", id);
+            throw new EntityValidationException(errors);
+        }
+
         Integer meal_id = restaurantService.createMealForRestaurantWithId(id, meal);
 
         HttpHeaders headers = new HttpHeaders();
