@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static app.service.validation.ValidationUtil.*;
@@ -19,6 +20,27 @@ public class RestaurantServiceCreateTest extends AbstractServiceTest {
 
     @Autowired
     private RestaurantService restaurantService;
+
+    @Test
+    public void createRestaurant() {
+        Restaurant r1 = new Restaurant("Burger King", 0, new ArrayList<>());
+        Meal m1 = new Meal("Georgian Salad", MealCategory.SALAD, 290);
+        r1.addMeal(m1);
+
+        Integer realRestaurantId = restaurantService.createRestaurant(r1);
+        Restaurant realRestaurant = restaurantService.getRestaurantById(realRestaurantId);
+
+        assertThat(realRestaurant)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "meals")
+                .isEqualTo(testRestaurant7);
+
+        assertThat(realRestaurant.getMeals())
+                .hasSameSizeAs(testRestaurant7.getMeals())
+                .usingRecursiveComparison()
+                .ignoringFields("id", "restaurant")
+                .isEqualTo(testRestaurant7.getMeals());
+    }
 
     @Test
     public void createRestaurant_withNullRestaurantInstance() {

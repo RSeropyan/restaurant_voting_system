@@ -185,6 +185,7 @@ public class RestaurantService {
         ValidationUtil.validateEntityProperties(meal);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         restaurant.addMeal(meal);
+        // DO NOT DELETE THIS flush() INVOCATION!
         restaurantRepository.flush();
         logger.info("Restaurant Service layer: New meal for restaurant with id = {} has been created.", id);
         return meal.getId();
@@ -200,7 +201,7 @@ public class RestaurantService {
         Restaurant r = restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant with id=" + id + " not found."));
         r.setName(restaurant.getName());
-        // Manual updating of votes is not allowed
+        r.setVotes(restaurant.getVotes());
         if (restaurant.getMeals() != null) {
             restaurant.getMeals().forEach(meal -> {
                 ValidationUtil.checkNotNullEntityInstance(meal);
@@ -208,6 +209,8 @@ public class RestaurantService {
                 ValidationUtil.validateEntityProperties(meal);
             });
             r.removeMeals();
+            // DO NOT DELETE THIS flush() INVOCATION!
+            restaurantRepository.flush();
             r.addMeals(restaurant.getMeals());
         }
         logger.info("Restaurant Service layer: Restaurant with id = {} has been updated.", id);
