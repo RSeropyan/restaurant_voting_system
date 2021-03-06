@@ -71,26 +71,20 @@ public class RestaurantRestController {
 
     @GetMapping("/restaurants/{id}")
     public ResponseEntity<Restaurant> getRestaurantById(@PathVariable Integer id) {
-
         Restaurant restaurant = restaurantService.getRestaurantById(id);
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=UTF-8");
         headers.add("Cache-Control", "no-store");
-
         logger.info("Restaurant Controller layer: Restaurant with id = {} has been returned in response.", id);
         return new ResponseEntity<>(restaurant, headers, HttpStatus.OK);
     }
 
     @GetMapping("/restaurants/meals/{id}")
     public ResponseEntity<Meal> getMealById(@PathVariable Integer id) {
-
         Meal meal = restaurantService.getMealById(id);
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=UTF-8");
         headers.add("Cache-Control", "no-store");
-
         logger.info("Restaurant Controller layer: Meal with id = {} has been returned in response.", id);
         return new ResponseEntity<>(meal, headers, HttpStatus.OK);
     }
@@ -131,48 +125,49 @@ public class RestaurantRestController {
     }
 
     @PostMapping("/restaurants")
-    public ResponseEntity<String> createRestaurant(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<String> createRestaurant(@RequestBody @Valid Restaurant restaurant, BindingResult bindingResult) {
+        checkBindingResult(bindingResult);
         Integer id = restaurantService.createRestaurant(restaurant);
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/restaurants/" + id);
-
         logger.info("Restaurant Controller layer: Restaurant with id = {} has been created.", id);
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @PostMapping("/restaurants/{id}")
     public ResponseEntity<String> createMealForRestaurantWithId(@PathVariable Integer id, @RequestBody @Valid Meal meal, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            List<String> errors = bindingResult.getFieldErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
-            logger.info("Restaurant Controller layer: Failed to validate meal entity while creating it for restaurant with id = {}.", id);
-            throw new EntityValidationException(errors);
-        }
-
+        checkBindingResult(bindingResult);
         Integer meal_id = restaurantService.createMealForRestaurantWithId(id, meal);
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/restaurants/meals/" + meal_id);
-
         logger.info("Restaurant Controller layer: Meal with id = {} has been created for restaurant with id = {}.", meal_id, id);
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @PutMapping("/restaurants/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateRestaurantById(@PathVariable Integer id, @RequestBody Restaurant restaurant) {
+    public void updateRestaurantById(@PathVariable Integer id, @RequestBody @Valid Restaurant restaurant, BindingResult bindingResult) {
+        checkBindingResult(bindingResult);
         restaurantService.updateRestaurantById(id, restaurant);
         logger.info("Restaurant Controller layer: Restaurant with id = {} has been updated.", id);
     }
 
     @PutMapping("/restaurants/meals/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateMealById(@PathVariable Integer id, @RequestBody Meal meal) {
+    public void updateMealById(@PathVariable Integer id, @RequestBody @Valid Meal meal, BindingResult bindingResult) {
+        checkBindingResult(bindingResult);
         restaurantService.updateMealById(id, meal);
         logger.info("Restaurant Controller layer: Meal with id = {} has been updated.", id);
+    }
+
+    private void checkBindingResult(BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getFieldErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            logger.info("Restaurant Controller layer: Failed to validate the entity.");
+            throw new EntityValidationException(errors);
+        }
     }
 
 }

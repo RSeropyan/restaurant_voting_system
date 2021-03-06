@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ErrorMessagesList {
 
@@ -16,7 +17,8 @@ public class ErrorMessagesList {
 
     public ErrorMessagesList(Exception e) {
         errorMessages = new ArrayList<>();
-        errorMessages.add(e.getMessage());
+        Throwable rootCause = findRootCause(e);
+        errorMessages.add(rootCause.getMessage());
     }
 
     public ErrorMessagesList(String errorMessage) {
@@ -31,4 +33,14 @@ public class ErrorMessagesList {
     public List<String> getErrorMessages() {
         return errorMessages;
     }
+
+    private static Throwable findRootCause(Exception e) {
+        Objects.requireNonNull(e);
+        Throwable rootCause = e;
+        while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
+            rootCause = rootCause.getCause();
+        }
+        return rootCause;
+    }
+
 }
