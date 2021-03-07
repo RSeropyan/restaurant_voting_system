@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @SpringJUnitWebConfig(classes = {app.config.DbConfig.class, app.config.WebConfig.class})
-@Sql(scripts = "/mysql_demo_data_script.sql")
+@Sql(scripts = "/mysql_test_data_script.sql")
 public abstract class AbstractControllerTest {
 
     @Autowired
