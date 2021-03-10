@@ -20,7 +20,8 @@ public class WebRunner implements WebApplicationInitializer {
         context.register(
                 app.config.WebConfig.class,
                 app.config.DbConfig.class,
-                app.config.CacheConfig.class
+                app.config.CacheConfig.class,
+                app.config.SecurityConfig.class
         );
 
         // Create and register the DispatcherServlet
